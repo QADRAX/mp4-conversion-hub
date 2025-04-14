@@ -2,10 +2,8 @@ import PQueue from "p-queue";
 import path from "path";
 import { createFileWatcher } from "../utils/createFileWatcher";
 import { progressState } from "../state/ProgressState";
-import { FileProcessingConfig } from "../types/FileProcessingConfig";
-import { Closeable, createJsonStorage, JsonStorage } from "@mp4-converter/generic";
+import { Closeable, createJsonStorage, FileProcessingConfig, HistoryEntry } from "@mp4-converter-hub/shared";
 import { handleFile } from "./handleFile";
-import { HistoryEntry } from "../state/history";
 
 /**
  * Starts watching a directory and processing video files.

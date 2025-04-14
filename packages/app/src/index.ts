@@ -1,8 +1,7 @@
 import {
   startFileProcessing,
   progressState,
-  ProgressStateData,
-} from "@mp4-converter/core";
+} from "@mp4-converter-hub/core";
 import {
   BACKEND_PORT,
   BANNER,
@@ -20,6 +19,7 @@ import cors from "cors";
 import { uploadMiddleware } from "./middleware/storage";
 import { generalRateLimiter, uploadRateLimiter } from "./middleware/rateLimit";
 import fs from "fs/promises";
+import { ProgressStateData } from "@mp4-converter-hub/shared";
 
 console.log(BANNER);
 

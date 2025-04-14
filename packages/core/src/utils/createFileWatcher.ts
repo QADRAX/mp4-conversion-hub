@@ -1,6 +1,9 @@
-import { FileWatcher, FileWatcherEvent } from "../types/FileWatcher";
 import chokidar, { FSWatcher, ChokidarOptions } from "chokidar";
-import { createObservable } from "@mp4-converter/generic";
+import {
+  createObservable,
+  FileWatcher,
+  FileWatcherEvent,
+} from "@mp4-converter-hub/shared";
 
 export function createFileWatcher(
   path: string,
@@ -25,7 +28,7 @@ export function createFileWatcher(
 
   const close = () => {
     watcher.close().then(() => {
-        console.log(`❌ Watcher "${path}" for "${event}" events stoped`);
+      console.log(`❌ Watcher "${path}" for "${event}" events stoped`);
     });
   };
 

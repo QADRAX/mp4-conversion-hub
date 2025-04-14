@@ -1,6 +1,5 @@
-import { FfmpegProgress } from "../types/FfmpegProgress";
+import { ConvertToMp4Options, FfmpegProgress } from "@mp4-converter-hub/shared";
 import ffmpeg from "fluent-ffmpeg";
-import { ConvertToMp4Options } from "../types/Mp4";
 
 /**
  * Converts a video to MP4 using ffmpeg with configurable options.

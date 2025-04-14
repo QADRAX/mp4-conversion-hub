@@ -1,10 +1,10 @@
-import { FfmpegProgress } from "../types/FfmpegProgress";
-import { Progress, ProgressStateData } from "../types/ProgressState";
 import {
   createStateContainer,
   Observer,
   StateContainer,
-} from "@mp4-converter/generic";
+  Progress, 
+  ProgressStateData
+} from "@mp4-converter-hub/shared";
 
 export const initialProgressState: ProgressStateData = {
   fileItems: [],

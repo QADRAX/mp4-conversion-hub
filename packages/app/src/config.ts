@@ -1,6 +1,6 @@
-import { Mp4Preset } from '@mp4-converter/core/dist/types/Mp4';
 import dotenv from 'dotenv';
 import { parseCsvString } from './utils/parseCsvString';
+import { Mp4Preset } from '@mp4-converter-hub/shared';
 
 dotenv.config();
 

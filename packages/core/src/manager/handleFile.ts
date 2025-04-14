@@ -5,10 +5,7 @@ import { waitUntilFileIsStableAndReadable } from "../utils/waitUntilFileIsReadab
 import { convertToMp4 } from "../utils/convertToMp4";
 import { logFfmpegProgress } from "../utils/logFfmpegProgress";
 import { progressState } from "../state/ProgressState";
-import { FileProcessingConfig } from "../types/FileProcessingConfig";
-import { FfmpegProgress } from "../types/FfmpegProgress";
-import { JsonStorage } from "@mp4-converter/generic";
-import { HistoryEntry } from "../state/history";
+import { JsonStorage, FfmpegProgress, FileProcessingConfig, HistoryEntry } from "@mp4-converter-hub/shared";
 
 async function isVideoFile(filePath: string): Promise<boolean> {
   const fileType = await fileTypeFromFile(filePath);

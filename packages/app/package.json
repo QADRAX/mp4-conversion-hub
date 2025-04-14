@@ -1,5 +1,5 @@
 {
-  "name": "@mp4-converter/app",
+  "name": "@mp4-converter-hub/app",
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
@@ -15,7 +15,7 @@
     "typescript": "^5.8.3"
   },
   "dependencies": {
-    "@mp4-converter/core": "1.0.0",
+    "@mp4-converter-hub/core": "1.0.0",
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "express-rate-limit": "^7.5.0",

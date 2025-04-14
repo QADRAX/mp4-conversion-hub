@@ -1,5 +1,5 @@
 {
-  "name": "@mp4-converter/mp4-converter",
+  "name": "mp4-converter-hub",
   "version": "1.0.0",
   "description": "Docker based MP4 Converter app for CasaOS",
   "main": "index.js",

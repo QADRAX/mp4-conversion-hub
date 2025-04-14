@@ -1,4 +1,5 @@
-import { Closeable, Subcribible } from "@mp4-converter/generic";
+import { Closeable } from "../closeable";
+import { Subcribible } from "../observable";
 
 export type FileWatcher = Subcribible<string> & Closeable;
 

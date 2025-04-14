@@ -1,10 +1,10 @@
-import { FfmpegProgress } from "../types/FfmpegProgress";
+import { FfmpegProgress } from "@mp4-converter-hub/shared";
 
 export function logFfmpegProgress(
   fileName: string,
   start: number,
   progress: FfmpegProgress
-): { minutesLeft: number, secondsLeft: number } {
+): { minutesLeft: number; secondsLeft: number } {
   const percent = progress.percent ?? 0;
   const elapsedMs = Date.now() - start;
 
@@ -15,7 +15,8 @@ export function logFfmpegProgress(
 
     const minutesLeft = Math.floor(remainingSec / 60);
     const secondsLeft = remainingSec % 60;
-    const humanTime = minutesLeft > 0 ? `${minutesLeft}m ${secondsLeft}s` : `${secondsLeft}s`;
+    const humanTime =
+      minutesLeft > 0 ? `${minutesLeft}m ${secondsLeft}s` : `${secondsLeft}s`;
 
     console.log(
       `🎞️ [${fileName}] ${percent.toFixed(2)}% - ${
@@ -23,9 +24,9 @@ export function logFfmpegProgress(
       } - ⏳ ~${humanTime} remaining`
     );
 
-    return { minutesLeft, secondsLeft }
+    return { minutesLeft, secondsLeft };
   } else {
     console.log(`🎞️ [${fileName}] starting...`);
-    return { minutesLeft: 0, secondsLeft: 0 }
+    return { minutesLeft: 0, secondsLeft: 0 };
   }
 }
