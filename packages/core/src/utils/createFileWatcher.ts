@@ -20,15 +20,15 @@ export function createFileWatcher(
   });
 
   watcher.on(event, (filePath) => {
-    console.log(`📂 Event "${event}" on file: ${filePath}`);
+    console.log(`📂 Event triggered on file: ${filePath}`);
     observable.notify(filePath);
   });
 
-  console.log(`🚀 Watching "${path}" for "${event}" events`);
+  console.log(`🚀 Watching "${path}" folder for new file events`);
 
   const close = () => {
     watcher.close().then(() => {
-      console.log(`❌ Watcher "${path}" for "${event}" events stoped`);
+      console.log(`❌ Watcher "${path}" for file events`);
     });
   };
 

@@ -104,5 +104,5 @@ app.get("*", basicAuth, (_, res) => {
 app.use(generalRateLimiter);
 
 app.listen(BACKEND_PORT, () => {
-  console.log("UI listen on Port " + BACKEND_PORT);
+  console.log("🚀 UI listen on Port " + BACKEND_PORT);
 });
