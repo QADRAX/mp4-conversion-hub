@@ -1,32 +1,13 @@
 import { useEffect, useState, useRef } from "preact/hooks";
 import "./ProgressList.css";
 import { PageContainer } from "./layout/PageContainer";
+import { FileItemProgressData, ProgressStateData } from "@mp4-converter-hub/shared";
 
-type Progress = {
-  frames?: number;
-  currentFps?: number;
-  currentKbps?: number;
-  targetSize?: number;
-  timemark?: string;
-  percent?: number;
-  minutesLeft?: number;
-  secondsLeft?: number;
-};
-
-type FileItem = {
-  fileName: string;
-  progress?: Progress;
-};
-
-type ProgressStateData = {
-  fileItems: FileItem[];
-};
-
-type FileItemWithState = FileItem & { state: "active" | "removing" };
+type FileItemWithState = FileItemProgressData & { state: "active" | "removing" };
 
 export function ProgressList(_: { path?: string }) {
   const [fileItems, setFileItems] = useState<FileItemWithState[]>([]);
-  const prevMapRef = useRef<Map<string, FileItem>>(new Map());
+  const prevMapRef = useRef<Map<string, FileItemProgressData>>(new Map());
 
   useEffect(() => {
     const eventSource = new EventSource("/api/progress");

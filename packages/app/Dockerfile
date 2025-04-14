@@ -12,7 +12,7 @@ RUN apt-get update && \
     freshclam && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN useradd --create-home --shell /bin/bash --uid 1000 appuser
+RUN useradd --create-home --shell /bin/bash appuser
 RUN mkdir -p /input /output && \
     chown -R appuser:appuser /input /output
 

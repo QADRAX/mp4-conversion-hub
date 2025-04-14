@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node packages/app/dist/index.js",
     "build": "lerna run build",
-    "docker-build": "docker build -f packages/app/Dockerfile -t mp4-converter:latest ."
+    "docker-build": "docker build -f packages/app/Dockerfile -t mp4-converter-hub:latest ."
   },
   "private": true,
   "workspaces": [
