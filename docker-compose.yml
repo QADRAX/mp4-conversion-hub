@@ -1,9 +1,9 @@
 services:
   video-watcher:
-    image: mp4-converter:latest
+    image: mp4-converter-hub:latest
     cpus: 8
     mem_limit: 1.5g
-    container_name: mp4-converter
+    container_name: mp4-converter-hub
     env_file:
       - .env
     ports:
