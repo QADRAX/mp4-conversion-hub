@@ -1,0 +1,45 @@
+.upload-dropzone {
+    border: 2px dashed #3498db;
+    padding: 2rem;
+    border-radius: 12px;
+    text-align: center;
+    background-color: #f9f9f9;
+    transition: background 0.3s ease;
+  }
+  
+  .upload-dropzone.drag-active {
+    background-color: #e6f4ff;
+  }
+  
+  .upload-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+  }
+  
+  .upload-form input[type="file"] {
+    padding: 0.5rem;
+  }
+  
+  .upload-form button {
+    padding: 0.5rem 1.2rem;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  
+  .upload-form button[disabled] {
+    background-color: #bbb;
+    cursor: not-allowed;
+  }
+  
+  .upload-hint {
+    margin-top: 1rem;
+    color: #777;
+    font-size: 0.9rem;
+  }
+  

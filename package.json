@@ -1,0 +1,24 @@
+{
+  "name": "@mp4-converter/mp4-converter",
+  "version": "1.0.0",
+  "description": "Docker based MP4 Converter app for CasaOS",
+  "main": "index.js",
+  "scripts": {
+    "start": "node packages/app/dist/index.js",
+    "build": "lerna run build",
+    "docker-build": "docker build -f packages/app/Dockerfile -t mp4-converter:latest ."
+  },
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "lerna": "^8.2.2",
+    "tsx": "^4.19.0",
+    "rimraf": "^6.0.1"
+  },
+  "dependencies": {
+  }
+}

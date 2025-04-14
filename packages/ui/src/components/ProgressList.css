@@ -1,0 +1,78 @@
+/* Lista y elementos */
+.progress-container ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.progress-container li {
+  margin-bottom: 1.2rem;
+  padding: 0.75rem;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  animation: fadeIn 0.3s ease-in-out;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.progress-container li.removing {
+  opacity: 0;
+  transform: scale(0.95);
+  animation: fadeOut 0.3s forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+/* Texto */
+.progress-container strong {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #2c3e50;
+}
+
+.progress-container progress {
+  width: 100%;
+  height: 20px;
+  border-radius: 10px;
+  appearance: none;
+}
+
+progress::-webkit-progress-bar {
+  background-color: #e0e0e0;
+  border-radius: 10px;
+}
+
+progress::-webkit-progress-value {
+  background-color: #3498db;
+  border-radius: 10px;
+}
+
+.progress-container .progress-text {
+  margin-top: 0.3rem;
+  font-size: 0.9rem;
+  color: #555;
+  text-align: right;
+}
+
+.waiting {
+  font-size: 0.85rem;
+  color: #999;
+  font-style: italic;
+}

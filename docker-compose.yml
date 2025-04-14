@@ -1,0 +1,14 @@
+services:
+  video-watcher:
+    image: mp4-converter:latest
+    cpus: 8
+    mem_limit: 1.5g
+    container_name: mp4-converter
+    env_file:
+      - .env
+    ports:
+      - "3000:3000"
+    volumes:
+      - "H:/test/input:/input"
+      - "H:/test/output:/output"
+    restart: unless-stopped
