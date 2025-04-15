@@ -36,3 +36,15 @@ jobs:
         tags: |
           qadraxdev/mp4-conversion-hub:latest
           qadraxdev/mp4-conversion-hub:${{ steps.extract_tag.outputs.TAG }}
+          
+    - name: Save Docker image to tar
+      run: |
+        docker pull qadraxdev/mp4-conversion-hub:${{ steps.extract_tag.outputs.TAG }}
+        docker save qadraxdev/mp4-conversion-hub:${{ steps.extract_tag.outputs.TAG }} -o mp4-conversion-hub.tar
+
+    - name: Upload Docker image tar to GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: mp4-conversion-hub.tar
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
