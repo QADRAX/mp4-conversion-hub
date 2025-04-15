@@ -31,6 +31,7 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         context: .
+        file: packages/app/Dockerfile
         push: true
         tags: |
           qadrax/mp4-conversion-hub:latest
