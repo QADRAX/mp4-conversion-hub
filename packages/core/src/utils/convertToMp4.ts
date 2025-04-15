@@ -22,7 +22,7 @@ export function convertToMp4(
     onProgress,
   } = options;
 
-  console.log(`Converting to mp4 input: ${inputPath} output: ${outputPath}`);
+  console.log(`🚀 Converting to mp4 input: ${inputPath} output: ${outputPath}`);
 
   const outputOptions = [
     `-preset ${videoPreset}`,

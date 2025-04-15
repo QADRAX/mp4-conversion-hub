@@ -19,14 +19,14 @@ export function logFfmpegProgress(
       minutesLeft > 0 ? `${minutesLeft}m ${secondsLeft}s` : `${secondsLeft}s`;
 
     console.log(
-      `🎞️ [${fileName}] ${percent.toFixed(2)}% - ${
+      `🎞️  [${fileName}] ${percent.toFixed(2)}% - ${
         progress.timemark ?? "??"
       } - ⏳ ~${humanTime} remaining`
     );
 
     return { minutesLeft, secondsLeft };
   } else {
-    console.log(`🎞️ [${fileName}] starting...`);
+    console.log(`🎞️  [${fileName}] starting...`);
     return { minutesLeft: 0, secondsLeft: 0 };
   }
 }

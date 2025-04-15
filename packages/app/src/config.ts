@@ -36,6 +36,12 @@ export const INPUT_DIR = "/input";
 export const OUTPUT_DIR = "/output";
 
 /**
+ * If you are behind another proxy (like Nginx or Docker bridge), you can use its IP (e.g. "172.17.0.1" in Docker networking).
+ * If your application is not behind any proxy, simply set it to false.
+ */
+export const TRUST_PROXY = process.env.ADMIN_PASSWORD || "false"
+
+/**
  * Number of concurrent processing jobs allowed.
  * Read from the CONCURRENCY environment variable, default is 1.
  */
@@ -136,3 +142,4 @@ export const GENERAL_RATE_LIMIT_COOLDOWN_MINUTES: number = parseInt(
   process.env.GENERAL_RATE_LIMIT_COOLDOWN_MINUTES || "1",
   10
 );
+

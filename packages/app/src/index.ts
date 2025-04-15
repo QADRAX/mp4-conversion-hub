@@ -8,6 +8,7 @@ import {
   VIDEO_CRF,
   VIDEO_ENCODING_PRESET,
   INPUT_DIR,
+  TRUST_PROXY,
 } from "./config";
 import express from "express";
 import path from "path";
@@ -37,7 +38,9 @@ app.use(
   })
 );
 
-app.set("trust proxy", true);
+if (TRUST_PROXY != "false") {
+  app.set("trust proxy", TRUST_PROXY);
+}
 
 const frontendPath = path.resolve(__dirname, "../../ui/dist");
 
