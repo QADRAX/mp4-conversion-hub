@@ -4,6 +4,27 @@ A lightweight, Dockerized media processing hub designed for home servers like [C
 
 ---
 
+## ❓ Why MP4 Conversion Hub?
+
+MP4 Conversion Hub is an ideal tool for home media servers where families or groups of friends want to share and consume video content easily.
+
+Whether you're running Jellyfin, Plex, or a custom file server, one of the main challenges is ensuring that videos are in a format that can be streamed efficiently and universally. That’s where MP4 Conversion Hub fits in.
+
+MP4 Conversion Hub is Dockerized and designed to work seamlessly with other containers by sharing volumes. On a home server setup (e.g., CasaOS, Portainer, or manual Docker Compose), it's easy to:
+
+* Mount a common input folder from your SFTP server (where users drop videos).
+
+* Let MP4 Conversion Hub scan and convert those files to MP4 in a shared output folder.
+
+* Point Jellyfin directly to that output folder to serve optimized content to all users.
+
+```
+# Example structure:
+📂 /mnt/media
+├── 📂 input     # Shared with SFTP and MP4 Hub
+├── 📂 output    # Shared with Jellyfin and MP4 Hub
+```
+
 ## 🚀 Features
 
 - 📂 **Active folder watching** – Monitors input folders for new video files  
@@ -27,17 +48,31 @@ docker pull qadraxdev/mp4-conversion-hub:latest
 ### Option 2: With `docker-compose`
 
 ```yml
-version: '3.9'
 services:
   mp4-conversion-hub:
     image: qadraxdev/mp4-conversion-hub:latest
+    cpus: 2
+    mem_limit: 1g
     ports:
       - "3000:3000"
     volumes:
       - ./input:/input
       - ./output:/output
-    env_file:
-      - .env
+    environment:
+      TRUST_PROXY: false
+      CONCURRENCY: 1
+      VIDEO_ENCODING_PRESET: ultrafast
+      VIDEO_CRF: 28
+      ADMIN_USER: admin
+      ADMIN_PASSWORD: changeme
+      CORS_ALLOWED_ORIGINS: "*"
+      UPLOAD_RATE_LIMIT_MAX_ATTEMPTS: 5
+      UPLOAD_RATE_LIMIT_COOLDOWN_MINUTES: 1
+      UPLOAD_SIZE_LIMIT_MB: 3000
+      AUTH_RATE_LIMIT_MAX_ATTEMPTS: 3
+      AUTH_RATE_LIMIT_COOLDOWN_MINUTES: 5
+      GENERAL_RATE_LIMIT_MAX_ATTEMPTS: 100
+      GENERAL_RATE_LIMIT_COOLDOWN_MINUTES: 1
 ```
 
 

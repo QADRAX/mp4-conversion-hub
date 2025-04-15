@@ -38,3 +38,5 @@ Protects your server from DDoS or brute-force attacks with configurable request 
 
 ### 🚧 In progress
 - Custom webhooks to attach file conversion to n8n workflows
+- Update ClamAV database periodiacally
+- Video metadata normalization

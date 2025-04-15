@@ -44,7 +44,6 @@ jobs:
             mp4-conversion-hub-${{ github.event.release.tag_name }}.tar.gz
             release-assets/docker-compose.yml
             release-assets/download-image.sh
-            release-assets/.env.template
             CHANGELOG.md
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
