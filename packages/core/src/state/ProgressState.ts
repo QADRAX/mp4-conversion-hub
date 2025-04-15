@@ -4,7 +4,7 @@ import {
   StateContainer,
   Progress, 
   ProgressStateData
-} from "@mp4-converter-hub/shared";
+} from "@mp4-conversion-hub/shared";
 
 export const initialProgressState: ProgressStateData = {
   fileItems: [],

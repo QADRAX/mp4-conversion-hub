@@ -1,4 +1,4 @@
-import { FfmpegProgress } from "@mp4-converter-hub/shared";
+import { FfmpegProgress } from "@mp4-conversion-hub/shared";
 
 export function logFfmpegProgress(
   fileName: string,

@@ -1,4 +1,4 @@
-import { ConvertToMp4Options, FfmpegProgress } from "@mp4-converter-hub/shared";
+import { ConvertToMp4Options, FfmpegProgress } from "@mp4-conversion-hub/shared";
 import ffmpeg from "fluent-ffmpeg";
 
 /**

@@ -2,7 +2,7 @@ import PQueue from "p-queue";
 import path from "path";
 import { createFileWatcher } from "../utils/createFileWatcher";
 import { progressState } from "../state/ProgressState";
-import { Closeable, createJsonStorage, FileProcessingConfig, HistoryEntry } from "@mp4-converter-hub/shared";
+import { Closeable, createJsonStorage, FileProcessingConfig, HistoryEntry } from "@mp4-conversion-hub/shared";
 import { handleFile } from "./handleFile";
 
 /**

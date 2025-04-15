@@ -3,7 +3,7 @@ import {
   createObservable,
   FileWatcher,
   FileWatcherEvent,
-} from "@mp4-converter-hub/shared";
+} from "@mp4-conversion-hub/shared";
 
 export function createFileWatcher(
   path: string,

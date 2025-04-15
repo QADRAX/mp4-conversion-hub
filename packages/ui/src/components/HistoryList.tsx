@@ -1,7 +1,7 @@
 import { useEffect, useState } from "preact/hooks";
 import "./HistoryList.css";
 import { PageContainer } from "./layout/PageContainer";
-import { HistoryEntry } from "@mp4-converter-hub/shared";
+import { HistoryEntry } from "@mp4-conversion-hub/shared";
 
 export function HistoryList(_: { path?: string }) {
   const [history, setHistory] = useState<HistoryEntry[]>([]);

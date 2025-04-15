@@ -1,12 +1,12 @@
 {
-  "name": "mp4-converter-hub",
+  "name": "mp4-conversion-hub",
   "version": "1.0.0",
   "description": "Docker based MP4 Converter app for CasaOS",
   "main": "index.js",
   "scripts": {
     "start": "node packages/app/dist/index.js",
     "build": "lerna run build",
-    "docker-build": "docker build -f packages/app/Dockerfile -t mp4-converter-hub:latest ."
+    "docker-build": "docker build -f packages/app/Dockerfile -t mp4-conversion-hub:latest ."
   },
   "private": true,
   "workspaces": [
