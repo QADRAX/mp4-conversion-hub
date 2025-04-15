@@ -39,7 +39,7 @@ export const OUTPUT_DIR = "/output";
  * If you are behind another proxy (like Nginx or Docker bridge), you can use its IP (e.g. "172.17.0.1" in Docker networking).
  * If your application is not behind any proxy, simply set it to false.
  */
-export const TRUST_PROXY = process.env.ADMIN_PASSWORD || "false"
+export const TRUST_PROXY = process.env.TRUST_PROXY || "false"
 
 /**
  * Number of concurrent processing jobs allowed.
