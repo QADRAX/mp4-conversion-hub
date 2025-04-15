@@ -35,13 +35,13 @@ jobs:
       - name: Save Docker image to tar
         run: |
           docker pull qadraxdev/mp4-conversion-hub:${{ github.event.release.tag_name }}
-          docker save qadraxdev/mp4-conversion-hub:${{ github.event.release.tag_name }} -o mp4-conversion-hub-${{ github.event.release.tag_name }}.tar
+          docker save qadraxdev/mp4-conversion-hub:${{ github.event.release.tag_name }} | gzip > mp4-conversion-hub-${{ github.event.release.tag_name }}.tar.gz
 
       - name: Upload release assets
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            mp4-conversion-hub-${{ github.event.release.tag_name }}.tar
+            mp4-conversion-hub-${{ github.event.release.tag_name }}.tar.gz
             release-assets/docker-compose.yml
             release-assets/download-image.sh
             release-assets/.env.template
