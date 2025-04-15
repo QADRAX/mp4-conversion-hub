@@ -8,14 +8,15 @@ RUN npm run build
 FROM node:22-bookworm
 
 RUN apt-get update && \
-    apt-get install -y ffmpeg clamav && \
+    apt-get install -y ffmpeg clamav clamav-daemon && \
     freshclam && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN useradd --create-home --shell /bin/bash appuser
 RUN mkdir -p /input /output && \
-    chown -R appuser:appuser /input /output
-
+    chown -R appuser:appuser /input /output && \
+    chown -R appuser:appuser /var/lib/clamav
+    
 USER appuser
 
 WORKDIR /home/appuser/app

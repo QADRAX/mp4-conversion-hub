@@ -3,7 +3,8 @@ import {
   Observer,
   StateContainer,
   Progress, 
-  ProgressStateData
+  ProgressStateData,
+  ScanReport
 } from "@mp4-conversion-hub/shared";
 
 export const initialProgressState: ProgressStateData = {
@@ -14,7 +15,8 @@ export type ProgressState = {
   get: () => Readonly<ProgressStateData>;
   subscribe: (observer: Observer<Readonly<ProgressStateData>>) => () => void;
   pushFileItem: (fileItem: string) => void;
-  updateFileItem: (fileItem: string, ffmpegProgress: Progress) => void;
+  updateFileItemProgress: (fileItem: string, ffmpegProgress: Progress) => void;
+  updateFileItemScanReport: (fileItem: string, scanReport: ScanReport) => void;
   deleteFileItem: (fileItem: string) => void;
 };
 
@@ -32,7 +34,7 @@ export const progressState: ProgressState = {
     });
   },
 
-  updateFileItem(fileItem, progress) {
+  updateFileItemProgress(fileItem, progress) {
     progressStateContainer.update((updater) => {
       const item = updater.fileItems.find((item) => item.fileName === fileItem);
       if (item) {
@@ -40,6 +42,16 @@ export const progressState: ProgressState = {
       }
     });
   },
+
+  updateFileItemScanReport(fileItem, scanReport) {
+    progressStateContainer.update((updater) => {
+      const item = updater.fileItems.find((item) => item.fileName === fileItem);
+      if (item) {
+        item.scanReport = scanReport;
+      }
+    });
+  },
+
 
   deleteFileItem(fileItem) {
     progressStateContainer.update((updater) => {

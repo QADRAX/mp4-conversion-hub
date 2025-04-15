@@ -76,3 +76,21 @@ progress::-webkit-progress-value {
   color: #999;
   font-style: italic;
 }
+
+.scan {
+  font-size: 0.9rem;
+  margin: 0.25rem 0;
+}
+
+.scan-pending {
+  color: #999;
+}
+
+.scan-clean {
+  color: #2ecc71; /* green */
+}
+
+.scan-infected {
+  color: #e74c3c; /* red */
+  font-weight: bold;
+}

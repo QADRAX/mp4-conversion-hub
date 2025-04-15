@@ -1,3 +1,5 @@
+export type ProcessStatus = "success" | "error" | "skipped" | "infected";
+
 export type HistoryEntry = {
   fileName: string;
   timestamp: string;
@@ -5,6 +7,6 @@ export type HistoryEntry = {
   outputPath: string;
   inputSizeMb?: number;
   outputSizeMb?: number;
-  status: "success" | "error" | "skipped";
+  status: ProcessStatus;
   errorMessage?: string;
 };

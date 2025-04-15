@@ -1,9 +1,14 @@
 import { useEffect, useState, useRef } from "preact/hooks";
 import "./ProgressList.css";
 import { PageContainer } from "./layout/PageContainer";
-import { FileItemProgressData, ProgressStateData } from "@mp4-conversion-hub/shared";
+import {
+  FileItemProgressData,
+  ProgressStateData,
+} from "@mp4-conversion-hub/shared";
 
-type FileItemWithState = FileItemProgressData & { state: "active" | "removing" };
+type FileItemWithState = FileItemProgressData & {
+  state: "active" | "removing";
+};
 
 export function ProgressList(_: { path?: string }) {
   const [fileItems, setFileItems] = useState<FileItemWithState[]>([]);
@@ -66,6 +71,21 @@ export function ProgressList(_: { path?: string }) {
             class={item.state === "removing" ? "removing" : ""}
           >
             <strong>{item.fileName}</strong>
+
+            {item.scanReport ? (
+              item.scanReport.isInfected === null ? (
+                <div class="scan scan-pending">🕵️ Scanning for viruses...</div>
+              ) : item.scanReport.isInfected === false ? (
+                <div class="scan scan-clean">✅ Clean</div>
+              ) : (
+                <div class="scan scan-infected">
+                  ❌ Infected: {item.scanReport.viruses.join(", ")}
+                </div>
+              )
+            ) : (
+              <div class="scan scan-pending">🕵️ Waiting for scan...</div>
+            )}
+
             {item.progress ? (
               <div>
                 <progress

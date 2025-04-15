@@ -1,4 +1,5 @@
 import { FfmpegProgress } from "./FfmpegProgress";
+import { ScanReport } from "./ScanReport";
 
 export type Progress = FfmpegProgress & {
     minutesLeft: number;
@@ -7,6 +8,7 @@ export type Progress = FfmpegProgress & {
 
 export type FileItemProgressData = {
     fileName: string;
+    scanReport?: ScanReport;
     progress?: Progress;
 }
 

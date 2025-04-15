@@ -5,7 +5,8 @@ import { waitUntilFileIsStableAndReadable } from "../utils/waitUntilFileIsReadab
 import { convertToMp4 } from "../utils/convertToMp4";
 import { logFfmpegProgress } from "../utils/logFfmpegProgress";
 import { progressState } from "../state/ProgressState";
-import { JsonStorage, FfmpegProgress, FileProcessingConfig, HistoryEntry } from "@mp4-conversion-hub/shared";
+import { JsonStorage, FfmpegProgress, FileProcessingConfig, HistoryEntry, ProcessStatus } from "@mp4-conversion-hub/shared";
+import { scanFile } from "../utils/scanFile";
 
 async function isVideoFile(filePath: string): Promise<boolean> {
   const fileType = await fileTypeFromFile(filePath);
@@ -37,7 +38,7 @@ async function convertWithProgress(
   const start = Date.now();
   const onProgress = (progress: FfmpegProgress) => {
     const { minutesLeft, secondsLeft } = logFfmpegProgress(fileName, start, progress);
-    progressState.updateFileItem(fileName, { ...progress, minutesLeft, secondsLeft });
+    progressState.updateFileItemProgress(fileName, { ...progress, minutesLeft, secondsLeft });
   };
 
   await convertToMp4(filePath, outputPath, {
@@ -72,11 +73,10 @@ export async function handleFile(
   const fileName = path.basename(filePath);
   const outputPath = getOutputPath(filePath, config.outputDir, config.inputDir);
   const startTime = Date.now();
-  let errorOccurred = false;
-  let skippedOccurred = false;
   let errorMessage: string | undefined;
   let inputSizeMb: number | undefined;
   let outputSizeMb: number | undefined;
+  let status: ProcessStatus = 'success';
 
   console.log(`📥 Processing file: ${fileName}`);
 
@@ -91,13 +91,23 @@ export async function handleFile(
     const isVideo = await isVideoFile(filePath);
     if (!isVideo) {
       console.log(`⚠️ Skipping non-video file: ${fileName}`);
-      skippedOccurred = true;
+      status = 'skipped';
       return;
     }
 
     fileType = await fileTypeFromFile(filePath);
 
     await fs.mkdir(path.dirname(outputPath), { recursive: true });
+
+    console.log(`⏳ Waiting for ClamAV antivirus scan for: ${fileName} ...`);
+    const scanReport = await scanFile(filePath);
+    progressState.updateFileItemScanReport(fileName, scanReport);
+    if(scanReport.isInfected) {
+      console.log(`⚠️ ALERT infected file: ${fileName}`);
+      status = 'infected';
+      errorMessage = `ClamAV detects viruses in this file: ${scanReport.viruses.toString()}`;
+      return;
+    }
 
     if (isAlreadyMp4(fileType!)) {
       await copyAsMp4(filePath, outputPath);
@@ -106,13 +116,13 @@ export async function handleFile(
     }
   } catch (err) {
     console.error(`❌ Error processing ${fileName}:`, err);
-    errorOccurred = true;
+    status = 'error';
     errorMessage = (err as Error).message;
   } finally {
     progressState.deleteFileItem(fileName);
     await cleanupFile(filePath, fileName);
 
-    if (!errorOccurred && !skippedOccurred) {
+    if (status == 'success') {
       try {
         const outputStats = await fs.stat(outputPath);
         outputSizeMb = +(outputStats.size / (1024 * 1024)).toFixed(2);
@@ -128,9 +138,9 @@ export async function handleFile(
       fileName,
       timestamp: new Date().toISOString(),
       durationSeconds,
-      outputPath: skippedOccurred ? "" : outputPath ?? "",
-      status: skippedOccurred ? "skipped" : errorOccurred ? "error" : "success",
-      ...(errorOccurred && errorMessage ? { errorMessage } : {}),
+      outputPath: status == 'success' ? outputPath : "",
+      status,
+      errorMessage,
       outputSizeMb,
       inputSizeMb,
     });
