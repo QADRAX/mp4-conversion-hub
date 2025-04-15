@@ -70,7 +70,7 @@ export async function handleFile(
   historyStorage: JsonStorage<HistoryEntry>
 ): Promise<void> {
   const fileName = path.basename(filePath);
-  const outputPath = getOutputPath(filePath, config.outputDir, config.watchDir);
+  const outputPath = getOutputPath(filePath, config.outputDir, config.inputDir);
   const startTime = Date.now();
   let errorOccurred = false;
   let skippedOccurred = false;

@@ -1,7 +1,4 @@
-import {
-  startFileProcessing,
-  progressState,
-} from "@mp4-converter-hub/core";
+import { startFileProcessing, progressState } from "@mp4-converter-hub/core";
 import {
   BACKEND_PORT,
   BANNER,
@@ -9,8 +6,8 @@ import {
   CORS_ALLOWED_ORIGINS,
   OUTPUT_DIR,
   VIDEO_CRF,
-  VIDEO_PRESET,
-  WATCH_DIR,
+  VIDEO_ENCODING_PRESET,
+  INPUT_DIR,
 } from "./config";
 import express from "express";
 import path from "path";
@@ -23,14 +20,12 @@ import { ProgressStateData } from "@mp4-converter-hub/shared";
 
 console.log(BANNER);
 
-const {
-  getHistory,
-} = startFileProcessing({
-  watchDir: WATCH_DIR,
+const { getHistory } = startFileProcessing({
+  inputDir: INPUT_DIR,
   outputDir: OUTPUT_DIR,
   concurrency: CONCURRENCY,
   videoCrf: VIDEO_CRF,
-  mp4Preset: VIDEO_PRESET,
+  mp4Preset: VIDEO_ENCODING_PRESET,
 });
 
 const app = express();
@@ -41,6 +36,8 @@ app.use(
     credentials: true,
   })
 );
+
+app.set("trust proxy", true);
 
 const frontendPath = path.resolve(__dirname, "../../ui/dist");
 
@@ -75,20 +72,24 @@ app.get("/api/history", basicAuth, async (_req, res) => {
   }
 });
 
-app.post("/api/upload", uploadRateLimiter, basicAuth, uploadMiddleware.single("file"), (req, res) => {
-  res.json({ success: true, file: req.file?.filename });
-});
+app.post(
+  "/api/upload",
+  uploadRateLimiter,
+  basicAuth,
+  uploadMiddleware.single("file"),
+  (req, res) => {
+    res.json({ success: true, file: req.file?.filename });
+  }
+);
 
 app.get("/api/folders", async (req, res) => {
   const raw = (req.query.path as string) ?? "";
   const subpath = raw.replace(/[^a-zA-Z0-9/_-]/g, "").replace(/\.\./g, "");
-  const base = path.join(WATCH_DIR, subpath);
+  const base = path.join(INPUT_DIR, subpath);
 
   try {
     const entries = await fs.readdir(base, { withFileTypes: true });
-    const folders = entries
-      .filter((e) => e.isDirectory())
-      .map((e) => e.name);
+    const folders = entries.filter((e) => e.isDirectory()).map((e) => e.name);
 
     res.json({ path: subpath, folders });
   } catch (err) {
