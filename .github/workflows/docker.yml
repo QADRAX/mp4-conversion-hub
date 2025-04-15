@@ -34,5 +34,5 @@ jobs:
         file: packages/app/Dockerfile
         push: true
         tags: |
-          qadrax/mp4-conversion-hub:latest
-          qadrax/mp4-conversion-hub:${{ steps.extract_tag.outputs.TAG }}
+          qadraxdev/mp4-conversion-hub:latest
+          qadraxdev/mp4-conversion-hub:${{ steps.extract_tag.outputs.TAG }}
