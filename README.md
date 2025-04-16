@@ -2,8 +2,6 @@
 
 A lightweight, Dockerized media processing hub designed for home servers like [CasaOS](https://www.casaos.io/). It watches folders, scans files for viruses using ClamAV, and converts videos to MP4 format with FFmpeg. Includes a web UI for monitoring, uploading, and managing jobs.
 
----
-
 ## ❓ Why MP4 Conversion Hub?
 
 MP4 Conversion Hub is an ideal tool for home media servers where families or groups of friends want to share and consume video content easily.
@@ -34,8 +32,6 @@ MP4 Conversion Hub is Dockerized and designed to work seamlessly with other cont
 - 🔒 **Basic authentication** – Secures the interface with credentials  
 - 🐳 **Optimized for Docker** – Ideal for CasaOS, Portainer, or any home server  
 - 🧩 **Rate limiting** – Prevents abuse from uploads or logins  
-
----
 
 ## 📦 Installation (Docker)
 
@@ -75,31 +71,27 @@ services:
       GENERAL_RATE_LIMIT_COOLDOWN_MINUTES: 1
 ```
 
-
----
-
 ## ⚙️ Environment Variables
 
 Create a `.env` file (see `.env.template`) to customize configuration:
 
-| Variable                              | Default     | Description                                       |
-|---------------------------------------|-------------|---------------------------------------------------|
-| `TRUST_PROXY`                         | `false`     | Trust proxy headers (e.g., when behind Nginx)     |
-| `CONCURRENCY`                         | `1`         | Max number of concurrent jobs                     |
-| `VIDEO_ENCODING_PRESET`              | `ultrafast` | FFmpeg encoding preset                            |
-| `VIDEO_CRF`                           | `28`        | Constant Rate Factor for video quality            |
-| `ADMIN_USER`                          | `admin`     | Username for the web UI                           |
-| `ADMIN_PASSWORD`                      | `changeme`  | Password for the web UI                           |
-| `CORS_ALLOWED_ORIGINS`               | `*`         | Allowed origins for CORS requests                 |
-| `UPLOAD_SIZE_LIMIT_MB`               | `3000`      | Max upload size per file (in MB)                  |
-| `UPLOAD_RATE_LIMIT_MAX_ATTEMPTS`     | `5`         | Max upload attempts before cooldown               |
-| `UPLOAD_RATE_LIMIT_COOLDOWN_MINUTES` | `1`         | Upload cooldown period (minutes)                  |
-| `AUTH_RATE_LIMIT_MAX_ATTEMPTS`       | `3`         | Max failed login attempts                         |
-| `AUTH_RATE_LIMIT_COOLDOWN_MINUTES`   | `5`         | Login cooldown period (minutes)                   |
-| `GENERAL_RATE_LIMIT_MAX_ATTEMPTS`    | `100`       | Max general requests per IP                       |
-| `GENERAL_RATE_LIMIT_COOLDOWN_MINUTES`| `1`         | General rate limiting cooldown                    |
+| Variable                              | Default     | Description                                                                                   |
+|---------------------------------------|-------------|-----------------------------------------------------------------------------------------------|
+| `TRUST_PROXY`                         | `false`     | Enables proxy trust for proper IP, protocol, and secure cookie handling. Avoid using `true` directly in production. Instead, specify the IP or CIDR of your reverse proxy (e.g., `192.168.1.1`, `192.168.1.0/24`, or `loopback`). |
+| `CONCURRENCY`                         | `1`         | Maximum number of video conversion jobs to run at the same time. Increase to use more CPU/RAM. |
+| `VIDEO_ENCODING_PRESET`              | `ultrafast` | FFmpeg encoding preset. Valid options: `ultrafast`, `superfast`, `fast`, `medium`, `slow`, etc. |
+| `VIDEO_CRF`                           | `28`        | Constant Rate Factor: lower = higher quality. Range: 0–51. Recommended: 23–28.                |
+| `ADMIN_USER`                          | `admin`     | Username for accessing the web interface.                                                     |
+| `ADMIN_PASSWORD`                      | `changeme`  | Password for the web interface. Change it in production!                                      |
+| `CORS_ALLOWED_ORIGINS`               | `*`         | Comma-separated origins allowed for CORS. Use `*` to allow all.                              |
+| `UPLOAD_SIZE_LIMIT_MB`               | `3000`      | Maximum file size allowed for uploads (in megabytes).                                        |
+| `UPLOAD_RATE_LIMIT_MAX_ATTEMPTS`     | `5`         | Number of upload requests allowed before cooldown applies.                                   |
+| `UPLOAD_RATE_LIMIT_COOLDOWN_MINUTES` | `1`         | Cooldown duration (in minutes) after reaching upload limit.                                  |
+| `AUTH_RATE_LIMIT_MAX_ATTEMPTS`       | `3`         | Max failed login attempts before cooldown.                                                   |
+| `AUTH_RATE_LIMIT_COOLDOWN_MINUTES`   | `5`         | Login cooldown period after failed attempts.                                                 |
+| `GENERAL_RATE_LIMIT_MAX_ATTEMPTS`    | `100`       | General API request limit per IP.                                                            |
+| `GENERAL_RATE_LIMIT_COOLDOWN_MINUTES`| `1`         | Cooldown duration once general rate limit is hit.                                            |
 
----
 
 ## 🌐 Web UI
 
@@ -111,27 +103,17 @@ http://localhost:3000
 
 Use the credentials from your `.env` file to log in.
 
----
+## 📚 More Info
 
-## 📁 Folder Structure
+🔗 [Install MP4 Conversion Hub on CasaOS — GitHub Wiki](https://github.com/QADRAX/mp4-conversion-hub/wiki/Install-MP4-Conversion-Hub-on-CasaOS)
 
-- `input/` – Drop your video files here  
-- `output/` – Converted MP4 files will appear here  
-
----
 
 ## 📜 Changelog
 
 See [CHANGELOG.md](./CHANGELOG.md) for a full list of changes.
 
----
 
 ## 📄 License
 
 [MIT](./LICENSE)
 
----
-
-## 💬 Feedback & Contributions
-
-PRs and issues are welcome. Feel free to open one if you have suggestions or feature requests!
