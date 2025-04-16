@@ -2,26 +2,39 @@
     background-color: #3498db;
     color: white;
     padding: 1rem 2rem;
-    text-align: center;
     font-size: 1.75rem;
     font-weight: bold;
     border-bottom: 4px solid #2980b9;
     font-family: Segoe UI, Tahoma, Geneva, Verdana, sans-serif;
-}
-
-.nav-links {
-    margin-top: 0.5rem;
+  }
+  
+  .header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .logo-container {
+    display: flex;
+    align-items: center;
+  }
+  
+  .logo {
+    height: 60px;
+  }
+  
+  .nav-links {
     display: flex;
     gap: 1rem;
-    justify-content: center;
-}
-
-.nav-links a {
+  }
+  
+  .nav-links a {
     color: white;
     text-decoration: none;
     font-weight: bold;
-}
-
-.nav-links a:hover {
+  }
+  
+  .nav-links a:hover {
     text-decoration: underline;
-}
+  }
+  

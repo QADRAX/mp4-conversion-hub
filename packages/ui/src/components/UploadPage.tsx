@@ -8,6 +8,7 @@ export function UploadPage(_: { path?: string }) {
 
   return (
     <PageContainer>
+      <h2>Upload files</h2>
       <FolderNavigator onSelect={(path) => setSelectedPath(path)} />
       <hr style={{ margin: "2rem 0" }} />
       <UploadForm targetPath={selectedPath} />
