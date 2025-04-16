@@ -13,7 +13,6 @@ export function createFileWatcher(
   const observable = createObservable<string>();
 
   const watcher: FSWatcher = chokidar.watch(path, {
-    ignoreInitial: true,
     usePolling: true,
     interval: 1000,
     ...options,

@@ -10,7 +10,7 @@ import { handleFile } from "./handleFile";
  */
 export function startFileProcessing(config: FileProcessingConfig): Closeable & { getHistory: () => Promise<HistoryEntry[]> } {
   const queue = new PQueue({ concurrency: config.concurrency });
-  const fileWatcher = createFileWatcher(config.inputDir, "add");
+  const fileWatcher = createFileWatcher(config.inputDir, "add", { ignoreInitial: false });
 
   const history = createJsonStorage<HistoryEntry>(config.outputDir, "history.json");
   

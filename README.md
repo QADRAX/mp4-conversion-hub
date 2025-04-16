@@ -2,7 +2,7 @@
 
 A lightweight, Dockerized media processing hub designed for home servers like [CasaOS](https://www.casaos.io/). It watches folders, scans files for viruses using ClamAV, and converts videos to MP4 format with FFmpeg. Includes a web UI for monitoring, uploading, and managing jobs.
 
-## ❓ Why MP4 Conversion Hub?
+## Why MP4 Conversion Hub?
 
 MP4 Conversion Hub is an ideal tool for home media servers where families or groups of friends want to share and consume video content easily.
 
@@ -73,8 +73,6 @@ services:
 
 ## ⚙️ Environment Variables
 
-Create a `.env` file (see `.env.template`) to customize configuration:
-
 | Variable                              | Default     | Description                                                                                   |
 |---------------------------------------|-------------|-----------------------------------------------------------------------------------------------|
 | `TRUST_PROXY`                         | `false`     | Enables proxy trust for proper IP, protocol, and secure cookie handling. Avoid using `true` directly in production. Instead, specify the IP or CIDR of your reverse proxy (e.g., `192.168.1.1`, `192.168.1.0/24`, or `loopback`). |
@@ -95,6 +93,7 @@ Create a `.env` file (see `.env.template`) to customize configuration:
 
 ## 🌐 Web UI
 
+The MP4 Conversion Hub includes a built-in web interface that runs on port 3000 inside the container.
 After launching the container, access the web UI:
 
 ```
