@@ -1,0 +1,31 @@
+name: Trivy Scan (Build and Analyze Image)
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  scan:
+    name: Build and scan Docker image
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Install Trivy
+        run: |
+          curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
+
+      - name: Build Docker image (without pushing)
+        run: |
+          docker build -t mp4-conversion-hub-temp:scan -f packages/app/Dockerfile .
+
+      - name: Scan image with Trivy
+        run: |
+          trivy image --exit-code 1 --severity HIGH,CRITICAL mp4-conversion-hub-temp:scan
