@@ -2,6 +2,9 @@
   <img src="./logo.png" alt="MP4 Conversion Hub logo" width="400"/>
 </p>
 
+[![OSV-Scanner](https://github.com/QADRAX/mp4-conversion-hub/actions/workflows/osv-scanner.yaml/badge.svg?branch=main)](https://github.com/QADRAX/mp4-conversion-hub/actions/workflows/osv-scanner.yaml)
+[![CI Build](https://github.com/QADRAX/mp4-conversion-hub/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/QADRAX/mp4-conversion-hub/actions/workflows/ci.yml)
+
 # MP4 Conversion Hub
 
 A lightweight, Dockerized media processing hub designed for home servers like [CasaOS](https://www.casaos.io/). It watches folders, scans files for viruses using ClamAV, and converts videos to MP4 format with FFmpeg. Includes a web UI for monitoring, uploading, and managing jobs.
