@@ -9,6 +9,7 @@ import {
   VIDEO_ENCODING_PRESET,
   INPUT_DIR,
   TRUST_PROXY,
+  OLLAMA_URL,
 } from "./config";
 import express from "express";
 import path from "path";
@@ -27,6 +28,7 @@ const { getHistory } = startFileProcessing({
   concurrency: CONCURRENCY,
   videoCrf: VIDEO_CRF,
   mp4Preset: VIDEO_ENCODING_PRESET,
+  ollamaUrl: OLLAMA_URL
 });
 
 const app = express();

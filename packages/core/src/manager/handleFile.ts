@@ -7,6 +7,7 @@ import { logFfmpegProgress } from "../utils/logFfmpegProgress";
 import { progressState } from "../state/ProgressState";
 import { JsonStorage, FfmpegProgress, FileProcessingConfig, HistoryEntry, ProcessStatus } from "@mp4-conversion-hub/shared";
 import { scanFile } from "../utils/scanFile";
+import { extractVideoMetadata } from "../utils/llm-metadata";
 
 async function isVideoFile(filePath: string): Promise<boolean> {
   const fileType = await fileTypeFromFile(filePath);
@@ -108,6 +109,10 @@ export async function handleFile(
       errorMessage = `ClamAV detects viruses in this file: ${scanReport.viruses.toString()}`;
       return;
     }
+
+    console.log(`⏳ Extracting video metadata with IA ...`);
+    const metadata = await extractVideoMetadata(fileName, config.ollamaUrl);
+    console.log(metadata);
 
     if (isAlreadyMp4(fileType!)) {
       await copyAsMp4(filePath, outputPath);

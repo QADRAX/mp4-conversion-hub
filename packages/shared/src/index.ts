@@ -9,3 +9,4 @@ export * from './types/Mp4';
 export * from './types/ProgressState';
 export * from './types/history';
 export * from './types/ScanReport';
+export * from './types/VideoMetadata'

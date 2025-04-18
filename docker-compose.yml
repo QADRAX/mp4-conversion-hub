@@ -12,3 +12,6 @@ services:
       - "H:/test/input:/input"
       - "H:/test/output:/output"
     restart: unless-stopped
+
+volumes:
+  ollama_models:

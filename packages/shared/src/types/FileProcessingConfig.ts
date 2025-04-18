@@ -6,4 +6,5 @@ export type FileProcessingConfig = {
     concurrency: number;
     mp4Preset: Mp4Preset;
     videoCrf: number;
+    ollamaUrl: string;
 }

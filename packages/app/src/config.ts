@@ -143,3 +143,4 @@ export const GENERAL_RATE_LIMIT_COOLDOWN_MINUTES: number = parseInt(
   10
 );
 
+export const OLLAMA_URL = process.env.OLLAMA_URL || 'http://localhost:11434';
