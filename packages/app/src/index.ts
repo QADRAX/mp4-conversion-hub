@@ -9,7 +9,8 @@ import {
   VIDEO_ENCODING_PRESET,
   INPUT_DIR,
   TRUST_PROXY,
-  OLLAMA_URL,
+  GEMINI_API_KEY,
+  TMDB_API_KEY,
 } from "./config";
 import express from "express";
 import path from "path";
@@ -28,7 +29,8 @@ const { getHistory } = startFileProcessing({
   concurrency: CONCURRENCY,
   videoCrf: VIDEO_CRF,
   mp4Preset: VIDEO_ENCODING_PRESET,
-  ollamaUrl: OLLAMA_URL
+  tmdbApiKey: TMDB_API_KEY,
+  geminiApiKey: GEMINI_API_KEY,
 });
 
 const app = express();

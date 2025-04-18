@@ -7,7 +7,7 @@ import { logFfmpegProgress } from "../utils/logFfmpegProgress";
 import { progressState } from "../state/ProgressState";
 import { JsonStorage, FfmpegProgress, FileProcessingConfig, HistoryEntry, ProcessStatus } from "@mp4-conversion-hub/shared";
 import { scanFile } from "../utils/scanFile";
-import { extractVideoMetadata } from "../utils/llm-metadata";
+import { extractVideoMetadata } from "../utils/extractVideoMetadata";
 
 async function isVideoFile(filePath: string): Promise<boolean> {
   const fileType = await fileTypeFromFile(filePath);
@@ -111,7 +111,7 @@ export async function handleFile(
     }
 
     console.log(`⏳ Extracting video metadata with IA ...`);
-    const metadata = await extractVideoMetadata(fileName, config.ollamaUrl);
+    const metadata = await extractVideoMetadata(fileName, config.geminiApiKey, config.tmdbApiKey);
     console.log(metadata);
 
     if (isAlreadyMp4(fileType!)) {

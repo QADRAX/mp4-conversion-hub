@@ -143,4 +143,6 @@ export const GENERAL_RATE_LIMIT_COOLDOWN_MINUTES: number = parseInt(
   10
 );
 
-export const OLLAMA_URL = process.env.OLLAMA_URL || 'http://localhost:11434';
+export const GEMINI_API_KEY: string = process.env.GEMINI_API_KEY || "";
+
+export const TMDB_API_KEY: string = process.env.TMDB_API_KEY || "";
