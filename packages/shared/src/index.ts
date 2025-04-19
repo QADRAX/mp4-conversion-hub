@@ -11,3 +11,4 @@ export * from './types/history';
 export * from './types/ScanReport';
 export * from './types/VideoMetadata';
 export * from './types/Languages';
+export * from './types/Gemini';

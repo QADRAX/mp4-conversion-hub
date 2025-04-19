@@ -2,6 +2,43 @@
 
 ---
 
+## [v1.1.0] - 2025-04-19
+
+### 🆕 New Features
+
+- 🤖 **AI-powered video classification and metadata enrichment**  
+  The app now uses Google Gemini to analyze video filenames and classify them as either movies or TV series episodes. Based on this classification, it queries TMDB to fetch accurate metadata such as title, year, description, genres, language, and more. The enriched data is saved in a `.nfo` file compatible with media centers like Jellyfin and Kodi.
+
+- ⚙️ **New configuration options for metadata processing**  
+  The app introduces new environment variables to control AI and metadata behavior:
+  
+  #### Supported Gemini models via `GEMINI_MODEL`:
+  - `gemini-1.0-pro`
+  - `gemini-1.5-pro`
+  - `gemini-1.5-flash`
+  - `gemini-2.0-pro`
+  - `gemini-2.0-flash`
+  - `gemini-pro` _(legacy alias)_
+
+  #### Supported languages via `LANGUAGE`:
+  A wide range of locales are supported for metadata output, including but not limited to:
+  - English (`en-US`, `en-GB`, `en-AU`, ...)
+  - Spanish (`es-ES`, `es-AR`, `es-MX`, ...)
+  - French (`fr-FR`, `fr-CA`, `fr-BF`, ...)
+  - German (`de-DE`, `de-AT`, ...)
+  - Portuguese (`pt-PT`, `pt-BR`, ...)
+  - Italian (`it-IT`), Dutch (`nl-NL`), Japanese (`ja-JP`), Chinese (`zh-CN`, `zh-TW`, `zh-HK`), and many more.
+
+  #### Example usage in `.env`:
+  ```env
+  GEMINI_API_KEY=your-gemini-key
+  GEMINI_MODEL=gemini-2.0-flash
+  TMDB_API_KEY=your-tmdb-key
+  LANGUAGE=es-ES
+  ```
+
+---
+
 ## [v1.0.1] - 2025-04-17
 
 ### 🆕 New Features
@@ -55,4 +92,4 @@ First stable release of MP4 Conversion Hub – a lightweight, Dockerized media p
 ### 🚧 In progress
 - Custom webhooks to attach file conversion to n8n workflows
 - Update ClamAV database periodiacally
-- Video metadata normalization
+- ~~Video metadata normalization~~

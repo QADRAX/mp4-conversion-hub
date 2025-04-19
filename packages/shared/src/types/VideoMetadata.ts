@@ -17,7 +17,7 @@ export type EnrichedMovieMetadata = MovieMetadata & {
   tmdb?: TMDBMovieMetadata;
 };
 
-export type EnrichedSeriesMetadata = MovieMetadata & {
+export type EnrichedSeriesMetadata = SeriesMetadata & {
   tmdb?: TMDBSeriesMetadata;
 };
 
@@ -71,4 +71,16 @@ export function isMovieMetadata(
   metadata: VideoMetadata
 ): metadata is MovieMetadata {
   return "title" in metadata && !("season" in metadata);
+}
+
+export function isEnrichedMovieMetadata(
+  metadata: EnrichedVideoMetadata
+): metadata is EnrichedMovieMetadata {
+  return "title" in metadata && !("season" in metadata);
+}
+
+export function isEnrichedSeriesMetadata(
+  metadata: EnrichedVideoMetadata
+): metadata is EnrichedSeriesMetadata {
+  return "season" in metadata && "episode" in metadata;
 }

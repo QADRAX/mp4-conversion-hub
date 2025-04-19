@@ -14,6 +14,8 @@ import {
 } from "@mp4-conversion-hub/shared";
 import { scanFile } from "../utils/scanFile";
 import { extractVideoMetadata } from "../utils/extractVideoMetadata";
+import { logMetadata } from "../utils/logMetadata";
+import { generateNfoFile } from "../utils/generateNfoFile";
 
 async function isVideoFile(filePath: string): Promise<boolean> {
   const fileType = await fileTypeFromFile(filePath);
@@ -128,14 +130,22 @@ export async function handleFile(
       return;
     }
 
-    console.log(`⏳ Extracting video metadata with IA ...`);
-    const metadata = await extractVideoMetadata(
-      fileName,
-      config.geminiApiKey,
-      config.tmdbApiKey,
-      config.language
-    );
-    console.log(metadata);
+    if (config.geminiApiKey && config.tmdbApiKey) {
+      console.log(`⏳ Extracting video metadata with Gemini IA and TMDB ...`);
+      const metadata = await extractVideoMetadata(
+        fileName,
+        config.geminiApiKey,
+        config.tmdbApiKey,
+        config.language,
+        config.geminiModel
+      );
+      logMetadata(metadata);
+      const outputDir = path.dirname(outputPath);
+      const baseName = path.basename(outputPath, path.extname(outputPath));
+      await generateNfoFile(outputDir, baseName, metadata);
+    } else {
+      console.log(`⚠️ Skipping metadata generation: missing Gemini and/or TMDB API keys`);
+    }
 
     if (isAlreadyMp4(fileType!)) {
       await copyAsMp4(filePath, outputPath);

@@ -1,4 +1,5 @@
 import {
+  GeminiModel,
   MovieMetadata,
   SeriesMetadata,
   VideoMetadata,
@@ -24,21 +25,45 @@ const seriesSchema = z.object({
   episode: z.coerce.number(),
 });
 
-function logAIResponse(stage: string, text: string) {
-  console.log(`[Gemini][${stage}] ${text}`);
+function logAIResponse(
+  stage: "classification" | "metadata",
+  text: string,
+  geminiModel: GeminiModel,
+  filename?: string
+) {
+  const icons = {
+    classification: "🧠",
+    metadata: "🎬",
+  };
+
+  const descriptions = {
+    classification: "Classified the type of video",
+    metadata: "Extracted metadata from the filename",
+  };
+
+  const icon = icons[stage];
+  const description = descriptions[stage];
+  const context = filename ? `Filename: "${filename}"` : "Unknown file";
+
+  console.log(`${icon} [${geminiModel}][${stage.toUpperCase()}] ${description}`);
+  console.log(`   ↪ ${context}`);
+  console.log(`   ↪ Response: ${text}`);
 }
+
+
 
 /**
  * Use LLM to classify whether a filename refers to a movie or a series.
  */
 export async function classifyVideoType(
   filename: string,
-  apiKey: string
+  apiKey: string,
+  geminiModel: GeminiModel = 'gemini-2.0-flash',
 ): Promise<"series" | "movie"> {
   const prompt = DETECT_TYPE_PROMPT.replace("{{FILENAME}}", filename);
-  const response = (await callGemini(prompt, apiKey)).trim().toLowerCase();
+  const response = (await callGemini(prompt, apiKey, geminiModel)).trim().toLowerCase();
 
-  logAIResponse("classification", response);
+  logAIResponse("classification", response, geminiModel, filename);
 
   if (response.includes("series")) return "series";
   if (response.includes("movie")) return "movie";
@@ -64,12 +89,13 @@ function buildPrompt(filename: string, type: "series" | "movie"): string {
 export async function getMetadataFromGemini(
   filename: string,
   type: "series" | "movie",
-  apiKey: string
+  apiKey: string,
+  geminiModel: GeminiModel = 'gemini-2.0-flash',
 ): Promise<MovieMetadata | SeriesMetadata> {
   const prompt = buildPrompt(filename, type);
-  const response = await callGemini(prompt, apiKey);
+  const response = await callGemini(prompt, apiKey, geminiModel);
 
-  logAIResponse("metadata", response);
+  logAIResponse("metadata", response, geminiModel, filename);
 
   const json = extractJsonFromText(response);
 

@@ -1,3 +1,5 @@
+import { GeminiModel } from "@mp4-conversion-hub/shared";
+
 /**
  * Sends a prompt to the Gemini API and returns the response text.
  * @param prompt The text prompt to send to Gemini.
@@ -7,7 +9,7 @@
 export async function callGemini(
   prompt: string,
   apiKey: string,
-  model = "gemini-2.0-flash"
+  model: GeminiModel = "gemini-2.0-flash"
 ): Promise<string> {
   const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
 

@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 import { parseCsvString } from "./utils/parseCsvString";
-import { AvailableLanguage, Mp4Preset } from "@mp4-conversion-hub/shared";
+import { AvailableLanguage, GeminiModel, Mp4Preset } from "@mp4-conversion-hub/shared";
 
 dotenv.config();
 
@@ -143,8 +143,40 @@ export const GENERAL_RATE_LIMIT_COOLDOWN_MINUTES: number = parseInt(
   10
 );
 
+/**
+ * API key to access Google Gemini (LLM) services.
+ *
+ * @env GEMINI_API_KEY
+ * @required for AI-based metadata extraction
+ */
 export const GEMINI_API_KEY: string = process.env.GEMINI_API_KEY || "";
 
+/**
+ * API key to access TMDB (The Movie Database).
+ * Used to enrich video metadata with real-world data.
+ *
+ * @env TMDB_API_KEY
+ * @required for fetching movie/series metadata
+ */
 export const TMDB_API_KEY: string = process.env.TMDB_API_KEY || "";
 
-export const LANGUAGE: AvailableLanguage = process.env.LANGUAGE as AvailableLanguage || 'en-US';
+/**
+ * Preferred language for metadata results from Gemini and TMDB.
+ *
+ * @env LANGUAGE
+ * @default 'en-US'
+ * @type {AvailableLanguage}
+ */
+export const LANGUAGE: AvailableLanguage =
+  (process.env.LANGUAGE as AvailableLanguage) || "en-US";
+
+/**
+ * Gemini model to use for AI-based processing.
+ * Should match one of the valid GeminiModel options.
+ *
+ * @env GEMINI_MODEL
+ * @default 'gemini-2.0-flash'
+ * @type {GeminiModel}
+ */
+export const GEMINI_MODEL: GeminiModel =
+  (process.env.GEMINI_MODEL as GeminiModel) || "gemini-2.0-flash";
