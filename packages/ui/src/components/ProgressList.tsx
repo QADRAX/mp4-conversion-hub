@@ -5,6 +5,7 @@ import {
   FileItemProgressData,
   ProgressStateData,
 } from "@mp4-conversion-hub/shared";
+import { ProgressListItem } from "./ProgressListItem";
 
 type FileItemWithState = FileItemProgressData & {
   state: "active" | "removing";
@@ -64,45 +65,9 @@ export function ProgressList(_: { path?: string }) {
   return (
     <PageContainer className="progress-container">
       <h2>File Conversion Progress</h2>
-      <ul>
+      <ul className="progress-item-list">
         {fileItems.map((item) => (
-          <li
-            key={item.fileName}
-            class={item.state === "removing" ? "removing" : ""}
-          >
-            <strong>{item.fileName}</strong>
-
-            {item.scanReport ? (
-              item.scanReport.isInfected === null ? (
-                <div class="scan scan-pending">🕵️ Scanning for viruses...</div>
-              ) : item.scanReport.isInfected === false ? (
-                <div class="scan scan-clean">✅ Clean</div>
-              ) : (
-                <div class="scan scan-infected">
-                  ❌ Infected: {item.scanReport.viruses.join(", ")}
-                </div>
-              )
-            ) : (
-              <div class="scan scan-pending">🕵️ Waiting for scan...</div>
-            )}
-
-            {item.progress ? (
-              <div>
-                <progress
-                  value={item.progress.percent ?? 0}
-                  max={100}
-                ></progress>
-                <div class="progress-text">
-                  {item.progress.percent?.toFixed(2)}%
-                  <span>
-                    {` — ⏳ ${item.progress.minutesLeft}m ${item.progress.secondsLeft}s remaining`}
-                  </span>
-                </div>
-              </div>
-            ) : (
-              <div class="waiting">Waiting to start...</div>
-            )}
-          </li>
+          <ProgressListItem key={item.fileName} item={item} />
         ))}
       </ul>
     </PageContainer>

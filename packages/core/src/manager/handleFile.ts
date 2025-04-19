@@ -143,6 +143,7 @@ export async function handleFile(
       const outputDir = path.dirname(outputPath);
       const baseName = path.basename(outputPath, path.extname(outputPath));
       await generateNfoFile(outputDir, baseName, metadata);
+      progressState.updateFileItemMetadata(fileName, metadata);
     } else {
       console.log(`⚠️ Skipping metadata generation: missing Gemini and/or TMDB API keys`);
     }

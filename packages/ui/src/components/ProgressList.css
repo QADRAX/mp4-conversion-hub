@@ -1,11 +1,11 @@
 /* Lista y elementos */
-.progress-container ul {
+.progress-container .progress-item-list {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-.progress-container li {
+.progress-container .progress-item {
   margin-bottom: 1.2rem;
   padding: 0.75rem;
   border: 1px solid #eee;
@@ -42,7 +42,6 @@
 
 /* Texto */
 .progress-container strong {
-  display: block;
   margin-bottom: 0.5rem;
   color: #2c3e50;
 }
@@ -79,7 +78,7 @@ progress::-webkit-progress-value {
 
 .scan {
   font-size: 0.9rem;
-  margin: 0.25rem 0;
+  margin: 0 0 1rem;
 }
 
 .scan-pending {
@@ -93,4 +92,45 @@ progress::-webkit-progress-value {
 .scan-infected {
   color: #e74c3c; /* red */
   font-weight: bold;
+}
+
+.metadata {
+  display: flex;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.poster {
+  border-radius: 0.5rem;
+  height: 275px;
+}
+
+.info {
+  flex: 1;
+}
+
+.title {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.episode {
+  font-size: 0.95rem;
+  color: #666;
+}
+
+.details {
+  margin: 0.5rem 0;
+  list-style: none;
+  padding: 0;
+}
+
+.details li {
+  margin: 0.2rem 0;
+}
+
+.overview {
+  font-size: 0.95rem;
+  color: #444;
+  margin-top: 0.5rem;
 }
