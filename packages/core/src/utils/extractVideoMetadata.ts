@@ -1,4 +1,4 @@
-import { EnrichedVideoMetadata } from "@mp4-conversion-hub/shared";
+import { AvailableLanguage, EnrichedVideoMetadata } from "@mp4-conversion-hub/shared";
 import {
   classifyVideoType,
   getMetadataFromGemini,
@@ -11,9 +11,10 @@ import { enrichWithTmdbMetadata } from "./enrichWithTmdbMetadata";
 export async function extractVideoMetadata(
   filename: string,
   geminiApiKey: string,
-  tmdbApiKey: string
+  tmdbApiKey: string,
+  language: AvailableLanguage = 'en-US'
 ): Promise<EnrichedVideoMetadata> {
   const type = await classifyVideoType(filename, geminiApiKey);
   const metadata = await getMetadataFromGemini(filename, type, geminiApiKey);
-  return enrichWithTmdbMetadata(metadata, tmdbApiKey);
+  return enrichWithTmdbMetadata(metadata, tmdbApiKey, language);
 }

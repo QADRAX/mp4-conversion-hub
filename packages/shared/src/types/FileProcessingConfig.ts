@@ -1,3 +1,4 @@
+import { AvailableLanguage } from "./Languages";
 import { Mp4Preset } from "./Mp4";
 
 export type FileProcessingConfig = {
@@ -9,4 +10,5 @@ export type FileProcessingConfig = {
 
     geminiApiKey: string;
     tmdbApiKey: string;
+    language: AvailableLanguage;
 }

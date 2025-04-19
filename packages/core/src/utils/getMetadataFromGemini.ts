@@ -1,4 +1,8 @@
-import { VideoMetadata } from "@mp4-conversion-hub/shared";
+import {
+  MovieMetadata,
+  SeriesMetadata,
+  VideoMetadata,
+} from "@mp4-conversion-hub/shared";
 import {
   DETECT_TYPE_PROMPT,
   MOVIE_PROMPT_TEMPLATE,
@@ -8,7 +12,7 @@ import { callGemini } from "./callGemini";
 import { z } from "zod";
 import { extractJsonFromText } from "./extractJsonFromText";
 
-// Schemas for type-safe parsing
+// Zod schemas for LLM output validation
 const movieSchema = z.object({
   title: z.string(),
   year: z.coerce.number(),
@@ -24,6 +28,9 @@ function logAIResponse(stage: string, text: string) {
   console.log(`[Gemini][${stage}] ${text}`);
 }
 
+/**
+ * Use LLM to classify whether a filename refers to a movie or a series.
+ */
 export async function classifyVideoType(
   filename: string,
   apiKey: string
@@ -39,6 +46,9 @@ export async function classifyVideoType(
   throw new Error(`Could not classify filename: ${response}`);
 }
 
+/**
+ * Build the prompt for metadata extraction.
+ */
 function buildPrompt(filename: string, type: "series" | "movie"): string {
   const template =
     type === "series" ? SERIES_PROMPT_TEMPLATE : MOVIE_PROMPT_TEMPLATE;
@@ -48,11 +58,14 @@ function buildPrompt(filename: string, type: "series" | "movie"): string {
   )}\nRespond ONLY with JSON.`;
 }
 
+/**
+ * Use Gemini to extract metadata from a filename.
+ */
 export async function getMetadataFromGemini(
   filename: string,
   type: "series" | "movie",
   apiKey: string
-): Promise<VideoMetadata> {
+): Promise<MovieMetadata | SeriesMetadata> {
   const prompt = buildPrompt(filename, type);
   const response = await callGemini(prompt, apiKey);
 
@@ -63,7 +76,6 @@ export async function getMetadataFromGemini(
   if (type === "series") {
     const parsed = seriesSchema.parse(JSON.parse(json));
     return {
-      type: "series",
       title: parsed.title.trim(),
       season: parsed.season,
       episode: parsed.episode,
@@ -71,7 +83,6 @@ export async function getMetadataFromGemini(
   } else {
     const parsed = movieSchema.parse(JSON.parse(json));
     return {
-      type: "movie",
       title: parsed.title.trim(),
       year: parsed.year,
     };

@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 import { parseCsvString } from "./utils/parseCsvString";
-import { Mp4Preset } from "@mp4-conversion-hub/shared";
+import { AvailableLanguage, Mp4Preset } from "@mp4-conversion-hub/shared";
 
 dotenv.config();
 
@@ -146,3 +146,5 @@ export const GENERAL_RATE_LIMIT_COOLDOWN_MINUTES: number = parseInt(
 export const GEMINI_API_KEY: string = process.env.GEMINI_API_KEY || "";
 
 export const TMDB_API_KEY: string = process.env.TMDB_API_KEY || "";
+
+export const LANGUAGE: AvailableLanguage = process.env.LANGUAGE as AvailableLanguage || 'en-US';

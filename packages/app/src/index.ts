@@ -11,6 +11,7 @@ import {
   TRUST_PROXY,
   GEMINI_API_KEY,
   TMDB_API_KEY,
+  LANGUAGE,
 } from "./config";
 import express from "express";
 import path from "path";
@@ -31,6 +32,7 @@ const { getHistory } = startFileProcessing({
   mp4Preset: VIDEO_ENCODING_PRESET,
   tmdbApiKey: TMDB_API_KEY,
   geminiApiKey: GEMINI_API_KEY,
+  language: LANGUAGE,
 });
 
 const app = express();
