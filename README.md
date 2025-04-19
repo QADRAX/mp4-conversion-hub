@@ -39,6 +39,7 @@ MP4 Conversion Hub is Dockerized and designed to work seamlessly with other cont
 - 🔒 **Basic authentication** – Secures the interface with credentials  
 - 🐳 **Optimized for Docker** – Ideal for CasaOS, Portainer, or any home server  
 - 🧩 **Rate limiting** – Prevents abuse from uploads or logins  
+- 🤖 **AI-powered metadata enrichment** – Uses Gemini and TMDB to classify videos and generate `.nfo` metadata files automatically
 
 ## 📦 Installation (Docker)
 
@@ -76,6 +77,10 @@ services:
       AUTH_RATE_LIMIT_COOLDOWN_MINUTES: 5
       GENERAL_RATE_LIMIT_MAX_ATTEMPTS: 100
       GENERAL_RATE_LIMIT_COOLDOWN_MINUTES: 1
+      GEMINI_API_KEY: your-gemini-api-key
+      TMDB_API_KEY: your-tmdb-api-key
+      GEMINI_MODEL: gemini-2.0-flash
+      LANGUAGE: es-ES
 ```
 
 ## ⚙️ Environment Variables
@@ -96,7 +101,10 @@ services:
 | `AUTH_RATE_LIMIT_COOLDOWN_MINUTES`   | `5`         | Login cooldown period after failed attempts.                                                 |
 | `GENERAL_RATE_LIMIT_MAX_ATTEMPTS`    | `100`       | General API request limit per IP.                                                            |
 | `GENERAL_RATE_LIMIT_COOLDOWN_MINUTES`| `1`         | Cooldown duration once general rate limit is hit.                                            |
-
+| `GEMINI_API_KEY`                     | –           | API key for Google Gemini LLM. Required for AI-based classification and metadata.            |
+| `TMDB_API_KEY`                       | –           | API key for The Movie Database. Used to enrich metadata.                                     |
+| `GEMINI_MODEL`                       | `gemini-2.0-flash` | Gemini model to use. Valid options include `gemini-1.5-pro`, `gemini-2.0-pro`, etc.       |
+| `LANGUAGE`                           | `en-US`     | Preferred language for metadata from TMDB and Gemini.                                        |
 
 ## 🌐 Web UI
 
@@ -111,6 +119,8 @@ Use the credentials from your `.env` file to log in.
 
 ## 📚 More Info
 
+🔗 [Configuration Reference — GitHub Wiki](https://github.com/QADRAX/mp4-conversion-hub/wiki/Configuration-Reference)
+
 🔗 [Install MP4 Conversion Hub on CasaOS — GitHub Wiki](https://github.com/QADRAX/mp4-conversion-hub/wiki/Install-MP4-Conversion-Hub-on-CasaOS)
 
 
@@ -118,8 +128,6 @@ Use the credentials from your `.env` file to log in.
 
 See [CHANGELOG.md](./CHANGELOG.md) for a full list of changes.
 
-
 ## 📄 License
 
 [MIT](./LICENSE)
-

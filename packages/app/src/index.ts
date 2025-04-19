@@ -9,6 +9,10 @@ import {
   VIDEO_ENCODING_PRESET,
   INPUT_DIR,
   TRUST_PROXY,
+  GEMINI_API_KEY,
+  TMDB_API_KEY,
+  LANGUAGE,
+  GEMINI_MODEL,
 } from "./config";
 import express from "express";
 import path from "path";
@@ -27,6 +31,10 @@ const { getHistory } = startFileProcessing({
   concurrency: CONCURRENCY,
   videoCrf: VIDEO_CRF,
   mp4Preset: VIDEO_ENCODING_PRESET,
+  tmdbApiKey: TMDB_API_KEY,
+  geminiApiKey: GEMINI_API_KEY,
+  geminiModel: GEMINI_MODEL,
+  language: LANGUAGE,
 });
 
 const app = express();

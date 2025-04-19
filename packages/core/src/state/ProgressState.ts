@@ -4,7 +4,8 @@ import {
   StateContainer,
   Progress, 
   ProgressStateData,
-  ScanReport
+  ScanReport,
+  EnrichedVideoMetadata
 } from "@mp4-conversion-hub/shared";
 
 export const initialProgressState: ProgressStateData = {
@@ -17,6 +18,7 @@ export type ProgressState = {
   pushFileItem: (fileItem: string) => void;
   updateFileItemProgress: (fileItem: string, ffmpegProgress: Progress) => void;
   updateFileItemScanReport: (fileItem: string, scanReport: ScanReport) => void;
+  updateFileItemMetadata: (fileItem: string, metadata: EnrichedVideoMetadata) => void;
   deleteFileItem: (fileItem: string) => void;
 };
 
@@ -52,6 +54,14 @@ export const progressState: ProgressState = {
     });
   },
 
+  updateFileItemMetadata(fileItem, metadata) {
+    progressStateContainer.update((updater) => {
+      const item = updater.fileItems.find((item) => item.fileName === fileItem);
+      if (item) {
+        item.enrichedMetadata = metadata;
+      }
+    });
+  },
 
   deleteFileItem(fileItem) {
     progressStateContainer.update((updater) => {

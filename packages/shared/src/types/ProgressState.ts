@@ -1,5 +1,6 @@
 import { FfmpegProgress } from "./FfmpegProgress";
 import { ScanReport } from "./ScanReport";
+import { EnrichedVideoMetadata } from "./VideoMetadata";
 
 export type Progress = FfmpegProgress & {
     minutesLeft: number;
@@ -8,6 +9,7 @@ export type Progress = FfmpegProgress & {
 
 export type FileItemProgressData = {
     fileName: string;
+    enrichedMetadata?: EnrichedVideoMetadata;
     scanReport?: ScanReport;
     progress?: Progress;
 }

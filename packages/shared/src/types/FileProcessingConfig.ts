@@ -1,3 +1,5 @@
+import { GeminiModel } from "./Gemini";
+import { AvailableLanguage } from "./Languages";
 import { Mp4Preset } from "./Mp4";
 
 export type FileProcessingConfig = {
@@ -6,4 +8,9 @@ export type FileProcessingConfig = {
     concurrency: number;
     mp4Preset: Mp4Preset;
     videoCrf: number;
+
+    geminiApiKey: string;
+    geminiModel: GeminiModel;
+    tmdbApiKey: string;
+    language: AvailableLanguage;
 }
