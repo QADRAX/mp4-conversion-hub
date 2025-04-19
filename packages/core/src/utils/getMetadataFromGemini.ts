@@ -16,7 +16,7 @@ import { extractJsonFromText } from "./extractJsonFromText";
 // Zod schemas for LLM output validation
 const movieSchema = z.object({
   title: z.string(),
-  year: z.coerce.number(),
+  year: z.coerce.number().optional(),
 });
 
 const seriesSchema = z.object({

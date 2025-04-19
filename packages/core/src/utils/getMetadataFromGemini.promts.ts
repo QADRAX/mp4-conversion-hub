@@ -64,20 +64,20 @@ Each filename may contain:
 - Year of release (usually 4 digits)
 - Extra tags like resolution, format, codecs, websites, release groups, etc.
 
-Your job is to extract only:
-- "title" → original movie title (cleaned, human-readable)
-- "year" → release year (number)
+Your job is to extract:
+- "title" → the original movie title (cleaned, human-readable)
+- "year" → the release year (if found, as a number)
 
-Output format:
+Output format (JSON only):
 {
   "title": string,
-  "year": number
+  "year": number (optional)
 }
 
-Ignore and exclude from the title:
-- [1080p], [720p], [WEBRip], [BluRay], [x264], release group (e.g. -YIFY), website tags, etc.
-
-Only return valid JSON. Do not explain anything.
+Rules:
+- Do **not** guess a year. Only include "year" if it clearly appears in the filename.
+- Exclude from title: resolution (e.g., [1080p]), format tags ([WEBRip], [BluRay]), codecs, release groups (-YIFY), or website markers.
+- Always return a valid JSON object, and nothing else.
 
 Filename: "{{FILENAME}}"
 `.trim();
