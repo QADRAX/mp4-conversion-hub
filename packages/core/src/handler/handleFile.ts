@@ -11,6 +11,7 @@ import {
   FileProcessingConfig,
   HistoryEntry,
   ProcessStatus,
+  EnrichedVideoMetadata,
 } from "@mp4-conversion-hub/shared";
 import { scanFile } from "../utils/scanFile";
 import { extractVideoMetadata } from "../utils/extractVideoMetadata";
@@ -98,6 +99,7 @@ export async function handleFile(
   let inputSizeMb: number | undefined;
   let outputSizeMb: number | undefined;
   let status: ProcessStatus = "success";
+  let metadata: EnrichedVideoMetadata | undefined;
 
   console.log(`📥 Processing file: ${fileName}`);
 
@@ -132,7 +134,7 @@ export async function handleFile(
 
     if (config.geminiApiKey && config.tmdbApiKey) {
       console.log(`⏳ Extracting video metadata with Gemini IA and TMDB ...`);
-      const metadata = await extractVideoMetadata(
+      metadata = await extractVideoMetadata(
         fileName,
         config.geminiApiKey,
         config.tmdbApiKey,
@@ -172,8 +174,7 @@ export async function handleFile(
 
     const end = Date.now();
     const durationSeconds = Math.round((end - startTime) / 1000);
-
-    await historyStorage.append({
+    const historyEntry: HistoryEntry = {
       fileName,
       timestamp: new Date().toISOString(),
       durationSeconds,
@@ -182,6 +183,10 @@ export async function handleFile(
       errorMessage,
       outputSizeMb,
       inputSizeMb,
-    });
+      metadata,
+    };
+
+    await historyStorage.append(historyEntry);
+    await sendWebhook(historyEntry, config.webhookUrl);
   }
 }

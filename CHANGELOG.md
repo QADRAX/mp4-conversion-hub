@@ -2,16 +2,26 @@
 
 ---
 
+## [v1.2.0] - 2025-04-20
+
+### 🆕 New Features
+
+- 🔔 **Custom webhook support for processing events**  
+  You can now configure the app to send real-time processing updates to your own services via webhooks.  
+  Just set the new environment variable `WEBHOOK_URL` to the desired endpoint, and the app will issue a `POST` request with the full job history entry.
+
+---
+
 ## [v1.1.0] - 2025-04-19
 
 ### 🆕 New Features
 
-- 🤖 **AI-powered video classification and metadata enrichment**  
+- 🤖 **AI-powered video classification and metadata enrichment**
   The app now uses Google Gemini to analyze video filenames and classify them as either movies or TV series episodes. Based on this classification, it queries TMDB to fetch accurate metadata such as title, year, description, genres, language, and more. The enriched data is saved in a `.nfo` file compatible with media centers like Jellyfin and Kodi.
 
-- ⚙️ **New configuration options for metadata processing**  
+- ⚙️ **New configuration options for metadata processing**
   The app introduces new environment variables to control AI and metadata behavior:
-  
+
   #### Supported Gemini models via `GEMINI_MODEL`:
   - `gemini-1.0-pro`
   - `gemini-1.5-pro`
@@ -54,42 +64,44 @@ First stable release of MP4 Conversion Hub – a lightweight, Dockerized media p
 
 ### 🚀 Key Features
 
--   **📂 Active folder watching**
+- **📂 Active folder watching**
 
-    Continuously monitors configured directories for incoming video files.
+  Continuously monitors configured directories for incoming video files.
 
--   **🛡️ ClamAV virus scanning**
+- **🛡️ ClamAV virus scanning**
 
-    Every file is scanned before conversion using ClamAV to ensure your system stays safe.
+  Every file is scanned before conversion using ClamAV to ensure your system stays safe.
 
--  **🎞️ MP4 video conversion with FFmpeg**
-    
-    Converts video files to MP4 using customizable encoding presets and CRF (Constant Rate Factor) values. FFmpeg is used under the hood.
+- **🎞️ MP4 video conversion with FFmpeg**
 
--  **🐳 Optimized for Docker & home servers**
-    
-    Built with Docker in mind – perfect for CasaOS or similar setups. Easily share volumes with other containers like SFTP servers.
+  Converts video files to MP4 using customizable encoding presets and CRF (Constant Rate Factor) values. FFmpeg is used under the hood.
 
--   **🌐 Web UI (port 3000)**
+- **🐳 Optimized for Docker & home servers**
 
-    Includes a built-in web interface where you can:
-    - Monitor conversion progress in real-time
-    - Upload new video files directly
-    - Browse conversion history
+  Built with Docker in mind – perfect for CasaOS or similar setups. Easily share volumes with other containers like SFTP servers.
 
--   **🔒 Configurable basic authentication**
+- **🌐 Web UI (port 3000)**
 
-    Secure access to the web interface with simple and customizable login credentials.
+  Includes a built-in web interface where you can:
 
--  **🌐 Rate limiting**
+  - Monitor conversion progress in real-time
+  - Upload new video files directly
+  - Browse conversion history
 
-    Protects your server from DDoS or brute-force attacks with configurable request rate limits.
+- **🔒 Configurable basic authentication**
+
+  Secure access to the web interface with simple and customizable login credentials.
+
+- **🌐 Rate limiting**
+
+  Protects your server from DDoS or brute-force attacks with configurable request rate limits.
 
 ---
 
 ## [Unreleased]
 
 ### 🚧 In progress
-- Custom webhooks to attach file conversion to n8n workflows
+
+- ~~Custom webhooks to attach file conversion to n8n workflows~~
 - Update ClamAV database periodiacally
 - ~~Video metadata normalization~~
