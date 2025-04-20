@@ -40,6 +40,7 @@ MP4 Conversion Hub is Dockerized and designed to work seamlessly with other cont
 - 🐳 **Optimized for Docker** – Ideal for CasaOS, Portainer, or any home server  
 - 🧩 **Rate limiting** – Prevents abuse from uploads or logins  
 - 🤖 **AI-powered metadata enrichment** – Uses Gemini and TMDB to classify videos and generate `.nfo` metadata files automatically
+- 🔔 **Webhook support** – Send processing results to your own endpoints via `WEBHOOK_URL`
 
 ## 📦 Installation (Docker)
 
@@ -81,6 +82,7 @@ services:
       TMDB_API_KEY: your-tmdb-api-key
       GEMINI_MODEL: gemini-2.0-flash
       LANGUAGE: es-ES
+      WEBHOOK_URL: https://your-service.com/webhook-endpoint
 ```
 
 ## ⚙️ Environment Variables
@@ -105,6 +107,7 @@ services:
 | `TMDB_API_KEY`                       | –           | API key for The Movie Database. Used to enrich metadata.                                     |
 | `GEMINI_MODEL`                       | `gemini-2.0-flash` | Gemini model to use. Valid options include `gemini-1.5-pro`, `gemini-2.0-pro`, etc.       |
 | `LANGUAGE`                           | `en-US`     | Preferred language for metadata from TMDB and Gemini.                                        |
+| `WEBHOOK_URL`                        | –           | Optional URL to receive POST requests with detailed processing job summaries. |
 
 ## 🌐 Web UI
 
@@ -122,6 +125,8 @@ Use the credentials from your `.env` file to log in.
 🔗 [Configuration Reference — GitHub Wiki](https://github.com/QADRAX/mp4-conversion-hub/wiki/Configuration-Reference)
 
 🔗 [Install MP4 Conversion Hub on CasaOS — GitHub Wiki](https://github.com/QADRAX/mp4-conversion-hub/wiki/Install-MP4-Conversion-Hub-on-CasaOS)
+
+🔗 [Webhook Payload Specification — GitHub Wiki](https://github.com/QADRAX/mp4-conversion-hub/wiki/Webhook-Payload-Specification)
 
 
 ## 📜 Changelog
