@@ -1,3 +1,5 @@
+import { EnrichedVideoMetadata } from "./VideoMetadata";
+
 export type ProcessStatus = "success" | "error" | "skipped" | "infected";
 
 export type HistoryEntry = {
@@ -9,4 +11,5 @@ export type HistoryEntry = {
   outputSizeMb?: number;
   status: ProcessStatus;
   errorMessage?: string;
+  metadata?: EnrichedVideoMetadata;
 };

@@ -13,4 +13,6 @@ export type FileProcessingConfig = {
     geminiModel: GeminiModel;
     tmdbApiKey: string;
     language: AvailableLanguage;
+
+    webhookUrl?: string;
 }

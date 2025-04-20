@@ -13,6 +13,7 @@ import {
   TMDB_API_KEY,
   LANGUAGE,
   GEMINI_MODEL,
+  WEBHOOK_URL,
 } from "./config";
 import express from "express";
 import path from "path";
@@ -35,6 +36,7 @@ const { getHistory } = startFileProcessing({
   geminiApiKey: GEMINI_API_KEY,
   geminiModel: GEMINI_MODEL,
   language: LANGUAGE,
+  webhookUrl: WEBHOOK_URL,
 });
 
 const app = express();

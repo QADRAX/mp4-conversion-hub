@@ -180,3 +180,8 @@ export const LANGUAGE: AvailableLanguage =
  */
 export const GEMINI_MODEL: GeminiModel =
   (process.env.GEMINI_MODEL as GeminiModel) || "gemini-2.0-flash";
+
+/**
+ * Optional environment variable that defines the URL of the webhook endpoint. *
+ */
+export const WEBHOOK_URL: string | undefined = process.env.WEBHOOK_URL;
