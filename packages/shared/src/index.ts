@@ -12,3 +12,4 @@ export * from './types/ScanReport';
 export * from './types/VideoMetadata';
 export * from './types/Languages';
 export * from './types/Gemini';
+export * from './types/TimeZone';

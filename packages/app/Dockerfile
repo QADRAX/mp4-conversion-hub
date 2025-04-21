@@ -16,6 +16,10 @@ RUN useradd --create-home --shell /bin/bash appuser
 RUN mkdir -p /input /output && \
     chown -R appuser:appuser /input /output && \
     chown -R appuser:appuser /var/lib/clamav
+
+RUN mkdir -p /var/log/clamav && \
+    touch /var/log/clamav/freshclam.log && \
+    chown -R appuser:appuser /var/log/clamav
     
 USER appuser
 

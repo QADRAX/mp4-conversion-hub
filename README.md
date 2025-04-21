@@ -18,9 +18,7 @@ Whether you're running Jellyfin, Plex, or a custom file server, one of the main 
 MP4 Conversion Hub is Dockerized and designed to work seamlessly with other containers by sharing volumes. On a home server setup (e.g., CasaOS, Portainer, or manual Docker Compose), it's easy to:
 
 * Mount a common input folder from your SFTP server (where users drop videos).
-
 * Let MP4 Conversion Hub scan and convert those files to MP4 in a shared output folder.
-
 * Point Jellyfin directly to that output folder to serve optimized content to all users.
 
 ```
@@ -38,9 +36,10 @@ MP4 Conversion Hub is Dockerized and designed to work seamlessly with other cont
 - 🌐 **Web UI** – Monitor progress, upload files, and browse history  
 - 🔒 **Basic authentication** – Secures the interface with credentials  
 - 🐳 **Optimized for Docker** – Ideal for CasaOS, Portainer, or any home server  
-- 🧩 **Rate limiting** – Prevents abuse from uploads or logins  
-- 🤖 **AI-powered metadata enrichment** – Uses Gemini and TMDB to classify videos and generate `.nfo` metadata files automatically
-- 🔔 **Webhook support** – Send processing results to your own endpoints via `WEBHOOK_URL`
+- 🚫 **Rate limiting** – Prevents abuse from uploads or logins  
+- 🤖 **AI-powered metadata enrichment** – Uses Gemini and TMDB to classify videos and generate `.nfo` metadata files automatically  
+- 🔔 **Webhook support** – Send processing results to your own endpoints via `WEBHOOK_URL`  
+- 🔄 **Automatic ClamAV database updates** – Runs daily antivirus definition updates
 
 ## 📦 Installation (Docker)
 
@@ -83,6 +82,8 @@ services:
       GEMINI_MODEL: gemini-2.0-flash
       LANGUAGE: es-ES
       WEBHOOK_URL: https://your-service.com/webhook-endpoint
+      DAILY_TASK_CRON: "0 2 * * *"
+      DAILY_TASK_TIMEZONE: "UTC"
 ```
 
 ## ⚙️ Environment Variables
@@ -108,6 +109,8 @@ services:
 | `GEMINI_MODEL`                       | `gemini-2.0-flash` | Gemini model to use. Valid options include `gemini-1.5-pro`, `gemini-2.0-pro`, etc.       |
 | `LANGUAGE`                           | `en-US`     | Preferred language for metadata from TMDB and Gemini.                                        |
 | `WEBHOOK_URL`                        | –           | Optional URL to receive POST requests with detailed processing job summaries. |
+| `DAILY_TASK_CRON`                    | `0 2 * * *` | Cron expression defining when the ClamAV DB update should run. |
+| `DAILY_TASK_TIMEZONE`                | `UTC`       | Timezone to use for the scheduled update task (e.g. `Europe/Madrid`, `America/New_York`). |
 
 ## 🌐 Web UI
 
@@ -122,12 +125,13 @@ Use the credentials from your `.env` file to log in.
 
 ## 📚 More Info
 
-🔗 [Configuration Reference — GitHub Wiki](https://github.com/QADRAX/mp4-conversion-hub/wiki/Configuration-Reference)
+🔗 [Configuration Reference — GitHub Wiki](https://github.com/QADRAX/mp4-conversion-hub/wiki/Configuration-Reference)  
 
-🔗 [Install MP4 Conversion Hub on CasaOS — GitHub Wiki](https://github.com/QADRAX/mp4-conversion-hub/wiki/Install-MP4-Conversion-Hub-on-CasaOS)
+🔗 [Install MP4 Conversion Hub on CasaOS — GitHub Wiki](https://github.com/QADRAX/mp4-conversion-hub/wiki/Install-MP4-Conversion-Hub-on-CasaOS)  
 
 🔗 [Webhook Payload Specification — GitHub Wiki](https://github.com/QADRAX/mp4-conversion-hub/wiki/Webhook-Payload-Specification)
 
+🔗 [AI-Powered Metadata Enrichment — GitHub Wiki](https://github.com/QADRAX/mp4-conversion-hub/wiki/AI%E2%80%90Powered-Metadata-Enrichment)
 
 ## 📜 Changelog
 

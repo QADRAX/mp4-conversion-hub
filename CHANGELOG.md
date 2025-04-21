@@ -2,6 +2,21 @@
 
 ---
 
+## [v1.3.0] - 2025-04-21
+
+### 🆕 Security features
+
+- 🛡️ **Automatic ClamAV database updates**  
+  The app can now keep its antivirus definitions up to date automatically using a scheduled cron task.  
+  You can customize the schedule and timezone with the following environment variables:
+  
+  - `DAILY_TASK_CRON` – defines the cron expression (e.g. `0 2 * * *` for daily at 2 AM)
+  - `DAILY_TASK_TIMEZONE` – defines the timezone (e.g. `Europe/Madrid`, `UTC`, etc.)
+
+  The update task runs once at startup and will only continue running on schedule if the initial update succeeds.
+
+---
+
 ## [v1.2.0] - 2025-04-20
 
 ### 🆕 New Features
@@ -103,5 +118,5 @@ First stable release of MP4 Conversion Hub – a lightweight, Dockerized media p
 ### 🚧 In progress
 
 - ~~Custom webhooks to attach file conversion to n8n workflows~~
-- Update ClamAV database periodiacally
+- ~~Update ClamAV database periodiacally~~
 - ~~Video metadata normalization~~
