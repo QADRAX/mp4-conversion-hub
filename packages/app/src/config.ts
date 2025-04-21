@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 import { parseCsvString } from "./utils/parseCsvString";
-import { AvailableLanguage, GeminiModel, Mp4Preset } from "@mp4-conversion-hub/shared";
+import { AvailableLanguage, GeminiModel, Mp4Preset, TimeZone } from "@mp4-conversion-hub/shared";
 
 dotenv.config();
 
@@ -185,3 +185,6 @@ export const GEMINI_MODEL: GeminiModel =
  * Optional environment variable that defines the URL of the webhook endpoint. *
  */
 export const WEBHOOK_URL: string | undefined = process.env.WEBHOOK_URL;
+
+export const DAILY_TASK_CRON: string = process.env.DAILY_TASK_CRON || '0 2 * * *';
+export const DAILY_TASK_TIMEZONE: TimeZone = process.env.DAILY_TASK_TIMEZONE as TimeZone || 'UTC';

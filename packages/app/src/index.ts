@@ -23,8 +23,11 @@ import { uploadMiddleware } from "./middleware/storage";
 import { generalRateLimiter, uploadRateLimiter } from "./middleware/rateLimit";
 import fs from "fs/promises";
 import { ProgressStateData } from "@mp4-conversion-hub/shared";
+import { setupCronTask } from "./cronTask";
 
 console.log(BANNER);
+
+setupCronTask();
 
 const { getHistory } = startFileProcessing({
   inputDir: INPUT_DIR,

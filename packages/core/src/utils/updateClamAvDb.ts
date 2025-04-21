@@ -3,15 +3,11 @@ import { promisify } from "util";
 
 const execAsync = promisify(exec);
 
-export async function updateClamAvDb(): Promise<void> {
+export async function updateClamAvDb(): Promise<string> {
   try {
     const { stdout } = await execAsync("freshclam");
-    console.log("✅ ClamAV database updated:\n", stdout);
+    return stdout;
   } catch (err: any) {
-    console.error(
-      "❌ Failed to update ClamAV database:\n",
-      err.stderr || err.message
-    );
     throw err;
   }
 }
