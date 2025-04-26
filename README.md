@@ -21,7 +21,7 @@ MP4 Conversion Hub automatically:
 - Extracts metadata using AI (Gemini + TMDB) for smart organization.
 - Sorts files into a **Jellyfin-friendly folder structure**:
   - Movies → `/movies/{movie title}/{movie title}.mp4`
-  - TV Shows → `/series/{series title}/season {season}/{original filename}.mp4`
+  - TV Shows → `/series/{series title}/season {season}/{series title}.S{season}E{episode}.mp4`
 - Generates `.nfo` files and poster images automatically for Jellyfin metadata scraping.
 - Sends a webhook notification after processing each file.
 
@@ -44,10 +44,10 @@ On a home server setup (e.g., CasaOS, Portainer, or manual Docker Compose), it's
         📄 Gladiator-poster.jpg
     📂 series
     └── 📂 Breaking Bad
-        └── 📂 season 1
-            📄 Breaking.Bad.S01E01.mp4
-            📄 Breaking.Bad.S01E01.nfo
-            📄 Breaking.Bad.S01E01-poster.jpg
+        └── 📂 season 01
+            📄 BreakingBad.S01E01.mp4
+            📄 BreakingBad.S01E01.nfo
+            📄 BreakingBad.S01E01-poster.jpg
 ```
 
 ## 🚀 Features

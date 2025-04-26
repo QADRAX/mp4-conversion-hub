@@ -1,11 +1,25 @@
 # Changelog
 
+## [v1.4.2] - 2025-04-27
+
+### 🔧 Improvements
+
+- 📂 Unified output file names
+  Media files are now renamed consistently using metadata information, generating cleaner and more organized filenames compatible with media servers like Jellyfin or Plex.
+
+- 📄 More accurate metadata extraction
+  Metadata extraction now corrects common text encoding errors automatically (e.g., fixing strange characters like `Ã¡` to `á`), improving title and episode name recognition.
+
+---
+
 ## [v1.4.1] - 2025-04-26
 
 ### 🔧 Improvements
 
 - 🎬 Use TMDB titles when available for output paths
   Now, when organizing media files, the system prioritizes TMDB titles (tmdb.title or tmdb.name) over local titles for cleaner and more accurate folder names. Falls back to local title if TMDB data is missing.
+
+---
 
 ## [v1.4.0] - 2025-04-26
 
@@ -18,7 +32,6 @@
 
 - 🖼️ Poster image download
   Automatically downloads and saves poster images alongside .mp4 and .nfo files to enhance metadata scraping in Jellyfin and similar media servers.
-
 
 ---
 

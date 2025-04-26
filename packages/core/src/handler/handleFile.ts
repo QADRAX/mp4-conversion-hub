@@ -2,139 +2,53 @@ import path from "path";
 import fs from "fs/promises";
 import { fileTypeFromFile } from "file-type";
 import { waitUntilFileIsStableAndReadable } from "../utils/waitUntilFileIsReadable";
-import { convertToMp4 } from "../utils/convertToMp4";
-import { logFfmpegProgress } from "../utils/logFfmpegProgress";
+import { scanFile } from "../utils/scanFile";
+import { extractVideoMetadata } from "../utils/extractVideoMetadata";
+import { generateNfoFile } from "../utils/generateNfoFile";
+import { downloadImage } from "../utils/downloadImage";
+import { sendWebhook } from "../utils/sendWebhook";
 import { progressState } from "../state/ProgressState";
 import {
   JsonStorage,
-  FfmpegProgress,
-  FileProcessingConfig,
   HistoryEntry,
   ProcessStatus,
+  FileProcessingConfig,
   EnrichedVideoMetadata,
-  isEnrichedSeriesMetadata,
-  isEnrichedMovieMetadata,
-  sanitizeFilename,
 } from "@mp4-conversion-hub/shared";
-import { scanFile } from "../utils/scanFile";
-import { extractVideoMetadata } from "../utils/extractVideoMetadata";
+import {
+  isAlreadyMp4,
+  copyAsMp4,
+  cleanupFile,
+  isVideoFile,
+} from "../utils/fileUtils";
+import { convertWithProgress } from "../utils/handleConversion";
 import { logMetadata } from "../utils/logMetadata";
-import { generateNfoFile } from "../utils/generateNfoFile";
-import { sendWebhook } from "../utils/sendWebhook";
-import { downloadImage } from "../utils/downloadImage";
-
-async function isVideoFile(filePath: string): Promise<boolean> {
-  const fileType = await fileTypeFromFile(filePath);
-  return !!fileType && fileType.mime.startsWith("video/");
-}
-
-function getOutputPath(
-  filePath: string,
-  outputDir: string,
-  watchDir: string,
-  metadata?: EnrichedVideoMetadata
-): string {
-  const relativePath = path.relative(watchDir, filePath);
-  const { name } = path.parse(relativePath);
-
-  const defaultPath = path.join(outputDir, name + ".mp4");
-
-  if (!metadata) {
-    return defaultPath;
-  }
-
-  if (isEnrichedSeriesMetadata(metadata)) {
-    const seasonFolder = `season ${metadata.season}`;
-    return path.join(
-      outputDir,
-      "series",
-      sanitizeFilename(metadata.tmdb?.name ?? metadata.title),
-      seasonFolder,
-      `${name}.mp4`
-    );
-  } else if (isEnrichedMovieMetadata(metadata)) {
-    return path.join(
-      outputDir,
-      "movies",
-      sanitizeFilename(metadata.tmdb?.title || metadata.title),
-      `${name}.mp4`
-    );
-  } else {
-    return defaultPath;
-  }
-}
-
-
-function isAlreadyMp4(fileType: { ext: string }): boolean {
-  return fileType.ext === "mp4";
-}
-
-async function copyAsMp4(filePath: string, outputPath: string): Promise<void> {
-  await fs.copyFile(filePath, outputPath);
-  console.log(`ℹ️ File copied as MP4: ${path.basename(filePath)}`);
-}
-
-async function convertWithProgress(
-  filePath: string,
-  outputPath: string,
-  config: FileProcessingConfig,
-  fileName: string
-): Promise<void> {
-  const start = Date.now();
-  const onProgress = (progress: FfmpegProgress) => {
-    const { minutesLeft, secondsLeft } = logFfmpegProgress(
-      fileName,
-      start,
-      progress
-    );
-    progressState.updateFileItemProgress(fileName, {
-      ...progress,
-      minutesLeft,
-      secondsLeft,
-    });
-  };
-
-  await convertToMp4(filePath, outputPath, {
-    onProgress,
-    videoPreset: config.mp4Preset,
-    crf: config.videoCrf,
-  });
-
-  console.log(`✅ Conversion finished: ${fileName}`);
-}
-
-async function cleanupFile(filePath: string, fileName: string) {
-  try {
-    await fs.unlink(filePath);
-    console.log(`🗑️ Original file deleted: ${fileName}`);
-  } catch (err) {
-    console.error(`❌ Error deleting file ${fileName}:`, err);
-  }
-}
+import {
+  buildOutputDirectory,
+  buildOutputFileName,
+} from "../utils/buildOutput";
+import { ensureDirectoryExists } from "../utils/ensureDirectoryExists";
 
 /**
  * Handles a single file for conversion.
- *
- * @param filePath - Path to the file.
- * @param config - Configuration for processing.
  */
 export async function handleFile(
   filePath: string,
   config: FileProcessingConfig,
   historyStorage: JsonStorage<HistoryEntry>
 ): Promise<void> {
-  const fileName = path.basename(filePath);
+  const originalFileName = path.basename(filePath);
+  const parsedPath = path.parse(filePath);
   const startTime = Date.now();
+
+  let status: ProcessStatus = "success";
   let errorMessage: string | undefined;
   let inputSizeMb: number | undefined;
   let outputSizeMb: number | undefined;
-  let status: ProcessStatus = "success";
   let metadata: EnrichedVideoMetadata | undefined;
-  let outputPath: string = "";
+  let outputPath = "";
 
-  console.log(`📥 Processing file: ${fileName}`);
-
-  let fileType;
+  console.log(`📥 Processing file: ${originalFileName}`);
 
   try {
     await waitUntilFileIsStableAndReadable(filePath);
@@ -144,55 +58,62 @@ export async function handleFile(
 
     const isVideo = await isVideoFile(filePath);
     if (!isVideo) {
-      console.log(`⚠️ Skipping non-video file: ${fileName}`);
+      console.log(`⚠️ Skipping non-video file: ${originalFileName}`);
       status = "skipped";
       return;
     }
 
-    fileType = await fileTypeFromFile(filePath);
+    const fileType = await fileTypeFromFile(filePath);
 
-    console.log(`⏳ Waiting for ClamAV antivirus scan for: ${fileName} ...`);
+    console.log(`⏳ Scanning with ClamAV: ${originalFileName}`);
     const scanReport = await scanFile(filePath);
-    progressState.updateFileItemScanReport(fileName, scanReport);
+    progressState.updateFileItemScanReport(originalFileName, scanReport);
     if (scanReport.isInfected) {
-      console.log(`⚠️ ALERT infected file: ${fileName}`);
+      console.log(`⚠️ File infected: ${originalFileName}`);
       status = "infected";
-      errorMessage = `ClamAV detects viruses in this file: ${scanReport.viruses.toString()}`;
+      errorMessage = `ClamAV detected virus: ${scanReport.viruses.join(", ")}`;
       return;
     }
 
     if (config.geminiApiKey && config.tmdbApiKey) {
-      console.log(`⏳ Extracting video metadata with Gemini IA and TMDB ...`);
+      console.log(`⏳ Extracting metadata...`);
       metadata = await extractVideoMetadata(
-        fileName,
+        originalFileName,
         config.geminiApiKey,
         config.tmdbApiKey,
         config.language,
         config.geminiModel
       );
       logMetadata(metadata);
-      progressState.updateFileItemMetadata(fileName, metadata);
+      progressState.updateFileItemMetadata(originalFileName, metadata);
     } else {
-      console.log(`⚠️ Skipping metadata generation: missing Gemini and/or TMDB API keys`);
+      console.log(`⚠️ Metadata extraction skipped (no API keys).`);
     }
 
-    outputPath = getOutputPath(filePath, config.outputDir, config.inputDir, metadata);
+    const outputDirPath = buildOutputDirectory(config.outputDir, metadata);
+    const outputFileName = buildOutputFileName(parsedPath.name, metadata);
+    outputPath = path.join(outputDirPath, outputFileName);
 
-    await fs.mkdir(path.dirname(outputPath), { recursive: true });
+    await ensureDirectoryExists(outputPath);
 
     if (metadata) {
-      const outputDir = path.dirname(outputPath);
-      const baseName = path.basename(outputPath, path.extname(outputPath));
-      await generateNfoFile(outputDir, baseName, metadata);
+      await generateNfoFile(
+        outputDirPath,
+        path.basename(outputPath, ".mp4"),
+        metadata
+      );
+
       if (metadata.tmdb?.poster_path) {
-        const imageUrl = metadata.tmdb.poster_path;
-        const posterPath = path.join(outputDir, `${baseName}-poster.jpg`);
+        const posterPath = path.join(
+          outputDirPath,
+          `${path.basename(outputPath, ".mp4")}-poster.jpg`
+        );
         try {
-          console.log(`⏳ Downloading poster for: ${fileName}`);
-          await downloadImage(imageUrl, posterPath);
-          console.log(`🖼️ Poster saved: ${posterPath}`);
+          console.log(`⏳ Downloading poster...`);
+          await downloadImage(metadata.tmdb.poster_path, posterPath);
+          console.log(`🖼️ Poster downloaded: ${posterPath}`);
         } catch (err) {
-          console.error(`❌ Failed to download poster:`, err);
+          console.error(`❌ Poster download failed:`, err);
         }
       }
     }
@@ -200,32 +121,32 @@ export async function handleFile(
     if (isAlreadyMp4(fileType!)) {
       await copyAsMp4(filePath, outputPath);
     } else {
-      await convertWithProgress(filePath, outputPath, config, fileName);
+      await convertWithProgress(filePath, outputPath, config, outputFileName);
     }
   } catch (err) {
-    console.error(`❌ Error processing ${fileName}:`, err);
+    console.error(`❌ Error processing ${originalFileName}:`, err);
     status = "error";
     errorMessage = (err as Error).message;
   } finally {
-    progressState.deleteFileItem(fileName);
-    await cleanupFile(filePath, fileName);
+    progressState.deleteFileItem(originalFileName);
+    await cleanupFile(filePath, originalFileName);
 
-    if (status == "success") {
+    if (status === "success") {
       try {
         const outputStats = await fs.stat(outputPath);
         outputSizeMb = +(outputStats.size / (1024 * 1024)).toFixed(2);
       } catch {
-        console.warn("⚠️ Could not read output file size.");
+        console.warn(`⚠️ Could not retrieve output size.`);
       }
     }
 
     const end = Date.now();
     const durationSeconds = Math.round((end - startTime) / 1000);
     const historyEntry: HistoryEntry = {
-      fileName,
+      fileName: originalFileName,
       timestamp: new Date().toISOString(),
       durationSeconds,
-      outputPath: status == "success" ? outputPath : "",
+      outputPath: status === "success" ? outputPath : "",
       status,
       errorMessage,
       outputSizeMb,
