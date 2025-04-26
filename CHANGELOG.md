@@ -2,6 +2,13 @@
 
 ## [v1.4.0] - 2025-04-26
 
+### 🔧 Improvements
+
+- 🎬 Use TMDB titles when available for output paths
+  Now, when organizing media files, the system prioritizes TMDB titles (tmdb.title or tmdb.name) over local titles for cleaner and more accurate folder names. Falls back to local title if TMDB data is missing.
+
+## [v1.4.0] - 2025-04-26
+
 ### 🆕 New features
 
 - 🗂️ Organized output by media type
