@@ -23,6 +23,7 @@ const seriesSchema = z.object({
   title: z.string(),
   season: z.coerce.number(),
   episode: z.coerce.number(),
+  episodeTitle: z.coerce.string().optional(),
 });
 
 function logAIResponse(
