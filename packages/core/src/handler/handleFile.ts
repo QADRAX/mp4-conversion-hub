@@ -12,12 +12,16 @@ import {
   HistoryEntry,
   ProcessStatus,
   EnrichedVideoMetadata,
+  isEnrichedSeriesMetadata,
+  isEnrichedMovieMetadata,
+  sanitizeFilename,
 } from "@mp4-conversion-hub/shared";
 import { scanFile } from "../utils/scanFile";
 import { extractVideoMetadata } from "../utils/extractVideoMetadata";
 import { logMetadata } from "../utils/logMetadata";
 import { generateNfoFile } from "../utils/generateNfoFile";
 import { sendWebhook } from "../utils/sendWebhook";
+import { downloadImage } from "../utils/downloadImage";
 
 async function isVideoFile(filePath: string): Promise<boolean> {
   const fileType = await fileTypeFromFile(filePath);
@@ -27,13 +31,39 @@ async function isVideoFile(filePath: string): Promise<boolean> {
 function getOutputPath(
   filePath: string,
   outputDir: string,
-  watchDir: string
+  watchDir: string,
+  metadata?: EnrichedVideoMetadata
 ): string {
   const relativePath = path.relative(watchDir, filePath);
-  const { dir, name } = path.parse(relativePath);
+  const { name } = path.parse(relativePath);
 
-  return path.join(outputDir, dir, `${name}.mp4`);
+  const defaultPath = path.join(outputDir, name + ".mp4");
+
+  if (!metadata) {
+    return defaultPath;
+  }
+
+  if (isEnrichedSeriesMetadata(metadata)) {
+    const seasonFolder = `season ${metadata.season}`;
+    return path.join(
+      outputDir,
+      "series",
+      sanitizeFilename(metadata.title),
+      seasonFolder,
+      `${name}.mp4`
+    );
+  } else if (isEnrichedMovieMetadata(metadata)) {
+    return path.join(
+      outputDir,
+      "movies",
+      sanitizeFilename(metadata.title),
+      `${name}.mp4`
+    );
+  } else {
+    return defaultPath;
+  }
 }
+
 
 function isAlreadyMp4(fileType: { ext: string }): boolean {
   return fileType.ext === "mp4";
@@ -94,13 +124,13 @@ export async function handleFile(
   historyStorage: JsonStorage<HistoryEntry>
 ): Promise<void> {
   const fileName = path.basename(filePath);
-  const outputPath = getOutputPath(filePath, config.outputDir, config.inputDir);
   const startTime = Date.now();
   let errorMessage: string | undefined;
   let inputSizeMb: number | undefined;
   let outputSizeMb: number | undefined;
   let status: ProcessStatus = "success";
   let metadata: EnrichedVideoMetadata | undefined;
+  let outputPath: string = "";
 
   console.log(`📥 Processing file: ${fileName}`);
 
@@ -120,8 +150,6 @@ export async function handleFile(
     }
 
     fileType = await fileTypeFromFile(filePath);
-
-    await fs.mkdir(path.dirname(outputPath), { recursive: true });
 
     console.log(`⏳ Waiting for ClamAV antivirus scan for: ${fileName} ...`);
     const scanReport = await scanFile(filePath);
@@ -143,12 +171,30 @@ export async function handleFile(
         config.geminiModel
       );
       logMetadata(metadata);
-      const outputDir = path.dirname(outputPath);
-      const baseName = path.basename(outputPath, path.extname(outputPath));
-      await generateNfoFile(outputDir, baseName, metadata);
       progressState.updateFileItemMetadata(fileName, metadata);
     } else {
       console.log(`⚠️ Skipping metadata generation: missing Gemini and/or TMDB API keys`);
+    }
+
+    outputPath = getOutputPath(filePath, config.outputDir, config.inputDir, metadata);
+
+    await fs.mkdir(path.dirname(outputPath), { recursive: true });
+
+    if (metadata) {
+      const outputDir = path.dirname(outputPath);
+      const baseName = path.basename(outputPath, path.extname(outputPath));
+      await generateNfoFile(outputDir, baseName, metadata);
+      if (metadata.tmdb?.poster_path) {
+        const imageUrl = metadata.tmdb.poster_path;
+        const posterPath = path.join(outputDir, `${baseName}-poster.jpg`);
+        try {
+          console.log(`⏳ Downloading poster for: ${fileName}`);
+          await downloadImage(imageUrl, posterPath);
+          console.log(`🖼️ Poster saved: ${posterPath}`);
+        } catch (err) {
+          console.error(`❌ Failed to download poster:`, err);
+        }
+      }
     }
 
     if (isAlreadyMp4(fileType!)) {
