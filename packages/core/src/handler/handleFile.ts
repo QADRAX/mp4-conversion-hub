@@ -48,7 +48,7 @@ function getOutputPath(
     return path.join(
       outputDir,
       "series",
-      sanitizeFilename(metadata.title),
+      sanitizeFilename(metadata.tmdb?.name ?? metadata.title),
       seasonFolder,
       `${name}.mp4`
     );
@@ -56,7 +56,7 @@ function getOutputPath(
     return path.join(
       outputDir,
       "movies",
-      sanitizeFilename(metadata.title),
+      sanitizeFilename(metadata.tmdb?.title || metadata.title),
       `${name}.mp4`
     );
   } else {
