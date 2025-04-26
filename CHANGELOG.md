@@ -2,6 +2,18 @@
 
 ---
 
+## [v1.3.1] - 2025-04-26
+
+### 🛠️ Fixes and improvements
+
+- 📝 Metadata parsing prompt improvements
+  Improved the prompts used for metadata extraction from filenames, allowing more accurate parsing of series titles and episode names.
+
+- 🛠️ Fixed webhook call issue
+  Fixed a bug that prevented the app from calling the webhook correctly and caused unexpected application restarts.
+
+---
+
 ## [v1.3.0] - 2025-04-21
 
 ### 🆕 Security features

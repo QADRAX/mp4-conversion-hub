@@ -17,6 +17,7 @@ import { scanFile } from "../utils/scanFile";
 import { extractVideoMetadata } from "../utils/extractVideoMetadata";
 import { logMetadata } from "../utils/logMetadata";
 import { generateNfoFile } from "../utils/generateNfoFile";
+import { sendWebhook } from "../utils/sendWebhook";
 
 async function isVideoFile(filePath: string): Promise<boolean> {
   const fileType = await fileTypeFromFile(filePath);

@@ -1,4 +1,4 @@
-async function sendWebhook(
+export async function sendWebhook(
   payload: Record<string, any>,
   webhookUrl: string | undefined
 ) {

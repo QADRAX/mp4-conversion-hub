@@ -26,6 +26,7 @@ You are an assistant that extracts structured metadata from video filenames of T
 Each filename may contain:
 - The show title (in its original language)
 - Season and episode number (in various formats)
+- Episode title (optional)
 - Extra information such as resolution, codec, release group, uploader, or website
 
 Your job:
@@ -33,14 +34,20 @@ Extract ONLY:
 - "title" → cleaned original title of the series
 - "season" → as a number
 - "episode" → as a number
+- "episodeTitle" → cleaned original title of the episode (if present)
 
-Ignore and exclude from the title:
+Ignore and exclude from both "title" and "episodeTitle":
 - Resolution (e.g. 1080p, 720p)
-- Format (x264, WEB-DL, BluRay, etc.)
+- Format (e.g. x264, WEB-DL, BluRay)
 - Website tags (e.g. [www.seriesflix.com])
 - Release groups or uploaders (e.g. -GroupName, byUploader)
 
-Season and Episode can appear in many formats:
+Important rules:
+- If the filename includes an episode title after the season/episode numbering, extract it as "episodeTitle".
+- Do not merge the episode title into the series title.
+- If no episode title is present, omit the "episodeTitle" field.
+
+Season and Episode numbers can appear in many formats:
 - S01E01, Season 1 Episode 1, 1x01, T1E01, [1x01], [Cap.101], E01.S01, Ep101
 - A 3-digit number (e.g. 203) should be interpreted as: season 2, episode 3
 
@@ -48,13 +55,15 @@ Output format:
 {
   "title": string,
   "season": number,
-  "episode": number
+  "episode": number,
+  "episodeTitle"?: string
 }
 
 Only output the JSON. Do not include any explanation.
 
 Filename: "{{FILENAME}}"
 `.trim();
+
 
 export const MOVIE_PROMPT_TEMPLATE = `
 You are an assistant that extracts structured metadata from movie filenames. My grandmother's health depends on your proper work; she needs this content properly standardized for her final days of life.
