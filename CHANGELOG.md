@@ -1,5 +1,18 @@
 # Changelog
 
+## [v1.4.0] - 2025-04-26
+
+### 🆕 New features
+
+- 🗂️ Organized output by media type
+  Files are now automatically sorted into a Jellyfin-friendly folder structure:
+  - Movies → `/movies/{movie title}/{movie title}.mp4`
+  - TV Shows → `/series/{series title}/season {season}/{original filename}.mp4`
+
+- 🖼️ Poster image download
+  Automatically downloads and saves poster images alongside .mp4 and .nfo files to enhance metadata scraping in Jellyfin and similar media servers.
+
+
 ---
 
 ## [v1.3.1] - 2025-04-26
@@ -123,12 +136,3 @@ First stable release of MP4 Conversion Hub – a lightweight, Dockerized media p
 
   Protects your server from DDoS or brute-force attacks with configurable request rate limits.
 
----
-
-## [Unreleased]
-
-### 🚧 In progress
-
-- ~~Custom webhooks to attach file conversion to n8n workflows~~
-- ~~Update ClamAV database periodiacally~~
-- ~~Video metadata normalization~~

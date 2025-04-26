@@ -2,6 +2,7 @@ export * from './observable';
 export * from './state';
 export * from './closeable';
 export * from './jsonStorage';
+export * from './sanetizeFileName';
 export * from './types/FfmpegProgress';
 export * from './types/FileProcessingConfig';
 export * from './types/FileWatcher';

@@ -13,19 +13,41 @@ A lightweight, Dockerized media processing hub designed for home servers like [C
 
 MP4 Conversion Hub is an ideal tool for home media servers where families or groups of friends want to share and consume video content easily.
 
-Whether you're running Jellyfin, Plex, or a custom file server, one of the main challenges is ensuring that videos are in a format that can be streamed efficiently and universally. That’s where MP4 Conversion Hub fits in.
+Whether you're running Jellyfin, Plex, or a custom file server, one of the main challenges is ensuring that videos are in a format that can be streamed efficiently and organized properly for direct playback. That’s where MP4 Conversion Hub fits in.
 
-MP4 Conversion Hub is Dockerized and designed to work seamlessly with other containers by sharing volumes. On a home server setup (e.g., CasaOS, Portainer, or manual Docker Compose), it's easy to:
+MP4 Conversion Hub automatically:
+- Converts videos to MP4 format if needed (or copies if already MP4).
+- Scans files with ClamAV antivirus before processing.
+- Extracts metadata using AI (Gemini + TMDB) for smart organization.
+- Sorts files into a **Jellyfin-friendly folder structure**:
+  - Movies → `/movies/{movie title}/{movie title}.mp4`
+  - TV Shows → `/series/{series title}/season {season}/{original filename}.mp4`
+- Generates `.nfo` files and poster images automatically for Jellyfin metadata scraping.
+- Sends a webhook notification after processing each file.
+
+MP4 Conversion Hub is Dockerized and designed to work seamlessly with other containers by sharing volumes.
+
+On a home server setup (e.g., CasaOS, Portainer, or manual Docker Compose), it's easy to:
 
 * Mount a common input folder from your SFTP server (where users drop videos).
-* Let MP4 Conversion Hub scan and convert those files to MP4 in a shared output folder.
-* Point Jellyfin directly to that output folder to serve optimized content to all users.
+* Let MP4 Conversion Hub scan and process the files into a structured output.
+* Point Jellyfin directly to the output folder to serve perfectly organized and optimized content to all users.
 
 ```
-# Example structure:
-📂 /mnt/media
-├── 📂 input     # Shared with SFTP and MP4 Hub
-├── 📂 output    # Shared with Jellyfin and MP4 Hub
+# Example folder structure after processing:
+📂 input        # Shared with SFTP and MP4 Hub (input files go here)
+📂 output       # Shared with Jellyfin and MP4 Hub
+    📂 movies
+    └── 📂 Gladiator
+        📄 Gladiator.mp4
+        📄 Gladiator.nfo
+        📄 Gladiator-poster.jpg
+    📂 series
+    └── 📂 Breaking Bad
+        └── 📂 season 1
+            📄 Breaking.Bad.S01E01.mp4
+            📄 Breaking.Bad.S01E01.nfo
+            📄 Breaking.Bad.S01E01-poster.jpg
 ```
 
 ## 🚀 Features
