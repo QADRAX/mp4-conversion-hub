@@ -2,6 +2,12 @@
 
 ---
 
+## [v1.3.1] - 2025-04-26
+
+- Fix send webhook function not defined.
+
+---
+
 ## [v1.3.0] - 2025-04-21
 
 ### 🆕 Security features
