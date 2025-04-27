@@ -38,16 +38,29 @@ On a home server setup (e.g., CasaOS, Portainer, or manual Docker Compose), it's
 📂 input        # Shared with SFTP and MP4 Hub (input files go here)
 📂 output       # Shared with Jellyfin and MP4 Hub
     📂 movies
-    └── 📂 Gladiator
-        📄 Gladiator.mp4
-        📄 Gladiator.nfo
-        📄 Gladiator-poster.jpg
+    └── 📂 Gladiator (2000)
+        📄 Gladiator (2000).mp4
+        📄 Gladiator (2000).nfo
+        📄 Gladiator (2000)-poster.jpg
     📂 series
     └── 📂 Breaking Bad
-        └── 📂 season 01
+        📄 tvshow.nfo                     # Metadata for the entire series
+        📄 poster.jpg                     # Poster for the entire series
+        📂 Season 01
+            📄 season01.nfo               # Metadata for Season 1
+            📄 season01-poster.jpg        # Poster for Season 1
             📄 BreakingBad.S01E01.mp4
-            📄 BreakingBad.S01E01.nfo
-            📄 BreakingBad.S01E01-poster.jpg
+            📄 BreakingBad.S01E01.nfo      # Metadata for Episode 1
+            📄 BreakingBad.S01E01-poster.jpg  # Poster for Episode 1
+            📄 BreakingBad.S01E02.mp4
+            📄 BreakingBad.S01E02.nfo
+            📄 BreakingBad.S01E02-poster.jpg
+        📂 Season 02
+            📄 season02.nfo
+            📄 season02-poster.jpg
+            📄 BreakingBad.S02E01.mp4
+            📄 BreakingBad.S02E01.nfo
+            📄 BreakingBad.S02E01-poster.jpg
 ```
 
 ## 🚀 Features
