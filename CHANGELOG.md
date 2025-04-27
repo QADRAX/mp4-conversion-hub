@@ -1,24 +1,46 @@
 # Changelog
 
+## [v1.4.2] - 2025-04-27
+
+### 🔧 Improvements
+
+- 📂 **Consistent and descriptive filenames for media content**
+
+  Output files are now renamed based on enriched metadata, including title, year, season and episode where applicable.
+
+- 📄 **Automatic correction of encoding issues in metadata**
+
+  Metadata extraction now corrects common text encoding errors automatically (e.g., fixing strange characters like `Ã¡` to `á`).
+
+- 🛠️ **Enhanced NFO file generation for TV series**
+
+  NFO files now include detailed and structured metadata for episodes (title, plot, air date, runtime), series, and seasons when available.
+
+---
+
 ## [v1.4.1] - 2025-04-26
 
 ### 🔧 Improvements
 
-- 🎬 Use TMDB titles when available for output paths
+- 🎬 **Use TMDB titles when available for output paths**
+
   Now, when organizing media files, the system prioritizes TMDB titles (tmdb.title or tmdb.name) over local titles for cleaner and more accurate folder names. Falls back to local title if TMDB data is missing.
+
+---
 
 ## [v1.4.0] - 2025-04-26
 
 ### 🆕 New features
 
-- 🗂️ Organized output by media type
+- 🗂️ **Organized output by media type**
+
   Files are now automatically sorted into a Jellyfin-friendly folder structure:
   - Movies → `/movies/{movie title}/{movie title}.mp4`
   - TV Shows → `/series/{series title}/season {season}/{original filename}.mp4`
 
-- 🖼️ Poster image download
-  Automatically downloads and saves poster images alongside .mp4 and .nfo files to enhance metadata scraping in Jellyfin and similar media servers.
+- 🖼️ **Poster image download**
 
+  Automatically downloads and saves poster images alongside .mp4 and .nfo files to enhance metadata scraping in Jellyfin and similar media servers.
 
 ---
 
@@ -26,10 +48,12 @@
 
 ### 🛠️ Fixes and improvements
 
-- 📝 Metadata parsing prompt improvements
+- 📝 **Metadata parsing prompt improvements**
+
   Improved the prompts used for metadata extraction from filenames, allowing more accurate parsing of series titles and episode names.
 
-- 🛠️ Fixed webhook call issue
+- 🛠️ **Fixed webhook call issue**
+
   Fixed a bug that prevented the app from calling the webhook correctly and caused unexpected application restarts.
 
 ---
@@ -38,7 +62,8 @@
 
 ### 🆕 Security features
 
-- 🛡️ **Automatic ClamAV database updates**  
+- 🛡️ **Automatic ClamAV database updates**
+
   The app can now keep its antivirus definitions up to date automatically using a scheduled cron task.  
   You can customize the schedule and timezone with the following environment variables:
   
@@ -64,9 +89,11 @@
 ### 🆕 New Features
 
 - 🤖 **AI-powered video classification and metadata enrichment**
+
   The app now uses Google Gemini to analyze video filenames and classify them as either movies or TV series episodes. Based on this classification, it queries TMDB to fetch accurate metadata such as title, year, description, genres, language, and more. The enriched data is saved in a `.nfo` file compatible with media centers like Jellyfin and Kodi.
 
 - ⚙️ **New configuration options for metadata processing**
+
   The app introduces new environment variables to control AI and metadata behavior:
 
   #### Supported Gemini models via `GEMINI_MODEL`:
@@ -101,6 +128,7 @@
 ### 🆕 New Features
 
 - 📂 **Initial input folder scan on startup**  
+
   The app now performs a full scan of the `/input` directory when it starts, detecting and processing any pending files that may have been added while the app was off. This ensures conversion resumes smoothly after rebooting your system or restarting the container.
 
 ---

@@ -13,17 +13,18 @@ export function logMetadata(metadata: EnrichedVideoMetadata): void {
   console.log("✅ Metadata extraction completed.");
   console.log(`📄 Title     : ${metadata.title}`);
 
+  if (!metadata.tmdb) {
+    console.warn(
+      "❌ TMDB metadata not found. This file may not be recognized."
+    );
+    return;
+  }
+
   if (isEnrichedMovieMetadata(metadata)) {
     console.log(`🎞️ Type      : MOVIE`);
     if (metadata.year) console.log(`📅 Year      : ${metadata.year}`);
-    if (!metadata.tmdb) {
-      console.warn(
-        "❌ TMDB metadata not found. This file may not be a recognized movie."
-      );
-      return;
-    }
-
     const { tmdb } = metadata;
+
     console.log(`🔗 TMDB ID   : ${tmdb.id}`);
     console.log(`📝 Overview  : ${tmdb.overview}`);
     console.log(`🏷️ Genres    : ${tmdb.genres.join(", ")}`);
@@ -35,21 +36,25 @@ export function logMetadata(metadata: EnrichedVideoMetadata): void {
     console.log(`🎞️ Type      : SERIES`);
     console.log(`📅 Season    : ${metadata.season}`);
     console.log(`🎬 Episode   : ${metadata.episode}`);
-    if (!metadata.tmdb) {
-      console.warn(
-        "❌ TMDB metadata not found. This file may not be a recognized TV show."
-      );
-      return;
-    }
-
     const { tmdb } = metadata;
-    console.log(`🔗 TMDB ID   : ${tmdb.id}`);
-    console.log(`📝 Overview  : ${tmdb.overview}`);
-    console.log(`🏷️ Genres    : ${tmdb.genres.join(", ")}`);
-    console.log(`🌐 Language  : ${tmdb.original_language}`);
+
+    const episodeTitle = tmdb.episode_data?.name;
+    const episodeOverview = tmdb.episode_data?.overview;
+    const episodeAirDate = tmdb.episode_data?.air_date;
+    const runtime = tmdb.episode_data?.runtime;
+
+    if (episodeTitle) console.log(`🎞️ Episode Title : ${episodeTitle}`);
+    if (episodeOverview) console.log(`📝 Plot           : ${episodeOverview}`);
+    else console.log(`📝 Plot           : ${tmdb.overview}`);
+    if (episodeAirDate) console.log(`📅 Air Date       : ${episodeAirDate}`);
+    else console.log(`📅 First Air      : ${tmdb.first_air_date}`);
+    if (runtime) console.log(`⏱️ Runtime        : ${runtime} min`);
+
+    console.log(`🔗 TMDB ID        : ${tmdb.id}`);
+    console.log(`🏷️ Genres         : ${tmdb.genres.join(", ")}`);
+    console.log(`🌐 Language       : ${tmdb.original_language}`);
     console.log(
-      `⭐ Rating    : ${tmdb.vote_average} (${tmdb.vote_count} votes)`
+      `⭐ Rating         : ${tmdb.vote_average} (${tmdb.vote_count} votes)`
     );
-    console.log(`📅 First Air : ${tmdb.first_air_date}`);
   }
 }
