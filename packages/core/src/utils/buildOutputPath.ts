@@ -5,7 +5,7 @@ import {
   isEnrichedMovieMetadata,
   sanitizeFilename,
 } from "@mp4-conversion-hub/shared";
-import { buildFilenameFromMetadata } from "../utils/buildFilenameFromMetadata";
+import { buildFilenameFromMetadata } from "./buildFilenameFromMetadata";
 
 /**
  * Builds the output filename (without path) based on metadata or original name.

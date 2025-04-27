@@ -26,7 +26,7 @@ import { logMetadata } from "../utils/logMetadata";
 import {
   buildOutputDirectory,
   buildOutputFileName,
-} from "../utils/buildOutput";
+} from "../utils/buildOutputPath";
 import { ensureDirectoryExists } from "../utils/ensureDirectoryExists";
 
 /**
@@ -94,7 +94,7 @@ export async function handleFile(
     const outputFileName = buildOutputFileName(parsedPath.name, metadata);
     outputPath = path.join(outputDirPath, outputFileName);
 
-    await ensureDirectoryExists(outputPath);
+    await ensureDirectoryExists(path.dirname(outputPath));
 
     if (metadata) {
       await generateNfoFile(
@@ -121,7 +121,7 @@ export async function handleFile(
     if (isAlreadyMp4(fileType!)) {
       await copyAsMp4(filePath, outputPath);
     } else {
-      await convertWithProgress(filePath, outputPath, config, outputFileName);
+      await convertWithProgress(filePath, outputPath, config, originalFileName);
     }
   } catch (err) {
     console.error(`❌ Error processing ${originalFileName}:`, err);

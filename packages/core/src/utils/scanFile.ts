@@ -19,8 +19,6 @@ const options: NodeClam.Options = {
   preference: "clamscan",
 };
 
-
-
 export async function scanFile(filePath: string): Promise<ScanReport> {
     const clamdscan = await nodeClam.init(options);
     const { isInfected, viruses } = await clamdscan.isInfected(filePath);

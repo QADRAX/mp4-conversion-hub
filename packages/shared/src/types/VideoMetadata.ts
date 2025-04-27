@@ -39,6 +39,9 @@ export interface TMDBMovieMetadata {
   vote_count: number;
   video: boolean;
   vote_average: number;
+  runtime?: number;
+  crew?: TMDBCrewMetadata[];
+  cast?: TMDBGuestStarMetadata[];
 }
 
 export interface TMDBSeriesMetadata {
@@ -57,6 +60,62 @@ export interface TMDBSeriesMetadata {
   popularity: number;
   vote_count: number;
   vote_average: number;
+  season_data?: TMDBSeasonMetadata;
+  episode_data?: TMDBEpisodeMetadata;
+}
+
+export interface TMDBSeasonMetadata {
+  air_date: string;
+  name: string;
+  overview: string;
+  id: number;
+  poster_path: string | null;
+  season_number: number;
+}
+
+export interface TMDBEpisodeMetadata {
+  air_date: string;
+  episode_number: number;
+  crew: TMDBCrewMetadata[];
+  guest_stars: TMDBGuestStarMetadata[];
+  id: number;
+  name: string;
+  overview: string;
+  production_code: string;
+  season_number: number;
+  still_path: string;
+  vote_average: number;
+  vote_count: number;
+  runtime: number;
+  show_id: number;
+}
+
+export interface TMDBCrewMetadata {
+  adult: boolean;
+  gender: number;
+  id: number;
+  known_for_department: string;
+  name: string;
+  original_name: string;
+  popularity: number;
+  profile_path: string;
+  credit_id: string;
+  department: string;
+  job: string;
+}
+
+export interface TMDBGuestStarMetadata {
+  credit_id: string;
+  order: number;
+  character: string;
+  adult: boolean;
+  gender: number | null;
+  id: number;
+  known_for_department: string;
+  name: string;
+  original_name: string;
+  popularity: number;
+  profile_path: string | null;
 }
 
 export function isSeriesMetadata(
