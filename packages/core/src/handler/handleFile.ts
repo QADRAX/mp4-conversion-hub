@@ -24,10 +24,12 @@ import {
 import { convertWithProgress } from "../utils/handleConversion";
 import { logMetadata } from "../utils/logMetadata";
 import {
-  buildOutputDirectory,
+  buildOutputPaths,
   buildOutputFileName,
 } from "../utils/buildOutputPath";
 import { ensureDirectoryExists } from "../utils/ensureDirectoryExists";
+import { ensureSeriesAndSeasonMetadata } from "../utils/ensureSeriesAndSeasonMetadata";
+import { selectPoster } from "../utils/selectPoster";
 
 /**
  * Handles a single file for conversion.
@@ -90,27 +92,39 @@ export async function handleFile(
       console.log(`⚠️ Metadata extraction skipped (no API keys).`);
     }
 
-    const outputDirPath = buildOutputDirectory(config.outputDir, metadata);
+    const { outputDirPath, seriesDirPath, seasonDirPath } = buildOutputPaths(
+      config.outputDir,
+      metadata
+    );
     const outputFileName = buildOutputFileName(parsedPath.name, metadata);
     outputPath = path.join(outputDirPath, outputFileName);
 
     await ensureDirectoryExists(path.dirname(outputPath));
 
     if (metadata) {
+      if (seriesDirPath && seasonDirPath) {
+        await ensureSeriesAndSeasonMetadata(
+          seriesDirPath,
+          seasonDirPath,
+          metadata
+        );
+      }
+
       await generateNfoFile(
         outputDirPath,
         path.basename(outputPath, ".mp4"),
         metadata
       );
 
-      if (metadata.tmdb?.poster_path) {
+      const posterUrl = selectPoster(metadata);
+      if (posterUrl) {
         const posterPath = path.join(
           outputDirPath,
           `${path.basename(outputPath, ".mp4")}-poster.jpg`
         );
         try {
-          console.log(`⏳ Downloading poster...`);
-          await downloadImage(metadata.tmdb.poster_path, posterPath);
+          console.log(`⏳ Downloading file poster...`);
+          await downloadImage(posterUrl, posterPath);
           console.log(`🖼️ Poster downloaded: ${posterPath}`);
         } catch (err) {
           console.error(`❌ Poster download failed:`, err);

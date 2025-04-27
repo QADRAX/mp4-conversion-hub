@@ -35,7 +35,11 @@ export async function enrichWithTmdbMetadata(
       const result = searchResults.results[0];
       if (!result) return metadata;
 
-      const details = await client.movies.details(result.id, ['credits'], language);
+      const details = await client.movies.details(
+        result.id,
+        ["credits"],
+        language
+      );
 
       return {
         ...metadata,
@@ -66,7 +70,7 @@ export async function enrichWithTmdbMetadata(
 
       let seasonData = undefined;
       let episodeData = undefined;
-      
+
       if (metadata.season !== undefined && metadata.episode !== undefined) {
         const seasonDetails = await client.tvShows.season(
           result.id,
@@ -101,7 +105,9 @@ export async function enrichWithTmdbMetadata(
             overview: episodeDetails.overview,
             production_code: episodeDetails.production_code,
             season_number: episodeDetails.season_number,
-            still_path: episodeDetails.still_path,
+            still_path: episodeDetails.still_path
+              ? `https://image.tmdb.org/t/p/w500${episodeDetails.still_path}`
+              : null,
             vote_average: episodeDetails.vote_average,
             vote_count: episodeDetails.vote_count,
             runtime: episodeDetails.runtime,

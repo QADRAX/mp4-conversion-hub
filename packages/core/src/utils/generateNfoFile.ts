@@ -1,6 +1,7 @@
 import fs from "fs/promises";
 import path from "path";
 import {
+  EnrichedSeriesMetadata,
   EnrichedVideoMetadata,
   isEnrichedMovieMetadata,
   isEnrichedSeriesMetadata,
@@ -29,67 +30,125 @@ export async function generateNfoFile(
 ): Promise<void> {
   const nfoPath = path.join(outputDir, `${fileNameWithoutExtension}.nfo`);
 
+  if (!metadata.tmdb) {
+    console.warn("⚠️ No TMDB metadata available. Skipping .nfo generation.");
+    return;
+  }
+
+  const xml = isEnrichedMovieMetadata(metadata)
+    ? buildXml("movie", {
+        title: metadata.tmdb.title,
+        originaltitle: metadata.tmdb.original_title,
+        plot: metadata.tmdb.overview,
+        year: metadata.tmdb.release_date?.split("-")[0],
+        id: metadata.tmdb.id.toString(),
+        language: metadata.tmdb.original_language,
+        genres: metadata.tmdb.genres,
+        runtime: metadata.tmdb.runtime?.toString(),
+        thumb: options.includeThumb ? metadata.tmdb.poster_path : undefined,
+        director: findDirector(metadata.tmdb.crew),
+        credits: findWriter(metadata.tmdb.crew),
+        actors: options.includeCast ? metadata.tmdb.cast : undefined,
+      })
+    : isEnrichedSeriesMetadata(metadata)
+    ? buildXml("episodedetails", {
+        title: metadata.tmdb.episode_data?.name || metadata.tmdb.name,
+        showtitle: metadata.tmdb.name,
+        plot: metadata.tmdb.episode_data?.overview || metadata.tmdb.overview,
+        season:
+          metadata.tmdb.episode_data?.season_number?.toString() ||
+          metadata.season?.toString(),
+        episode:
+          metadata.tmdb.episode_data?.episode_number?.toString() ||
+          metadata.episode?.toString(),
+        aired:
+          metadata.tmdb.episode_data?.air_date || metadata.tmdb.first_air_date,
+        runtime: metadata.tmdb.episode_data?.runtime?.toString(),
+        id: metadata.tmdb.id.toString(),
+        language: metadata.tmdb.original_language,
+        genres: metadata.tmdb.genres,
+        thumb: options.includeThumb
+          ? metadata.tmdb.episode_data?.still_path ?? undefined
+          : undefined,
+        director: findDirector(metadata.tmdb.episode_data?.crew),
+        credits: findWriter(metadata.tmdb.episode_data?.crew),
+        actors: options.includeCast
+          ? metadata.tmdb.episode_data?.guest_stars
+          : undefined,
+      })
+    : null;
+
+  if (!xml) {
+    console.warn("⚠️ Metadata type not recognized. Skipping .nfo generation.");
+    return;
+  }
+
+  await saveNfoFile(nfoPath, xml);
+}
+
+export async function generateNfoSerie(
+  seriesDirPath: string,
+  metadata: EnrichedSeriesMetadata
+): Promise<void> {
+  const nfoPath = path.join(seriesDirPath, "tvshow.nfo");
+
+  if (!metadata.tmdb) {
+    console.warn("⚠️ No TMDB metadata available. Skipping .nfo generation.");
+    return;
+  }
+
+  const xml = buildXml("tvshow", {
+    title: metadata.tmdb.name,
+    originaltitle: metadata.tmdb.original_name,
+    plot: metadata.tmdb.overview,
+    year: metadata.tmdb.first_air_date?.split("-")[0],
+    id: metadata.tmdb.id.toString(),
+    language: metadata.tmdb.original_language,
+    genres: metadata.tmdb.genres,
+  });
+
+  await saveNfoFile(nfoPath, xml);
+}
+
+export async function generateNfoSeason(
+  seasonDirPath: string,
+  seasonNumber: number,
+  metadata: EnrichedSeriesMetadata
+): Promise<void> {
+  const nfoPath = path.join(
+    seasonDirPath,
+    `season${seasonNumber.toString().padStart(2, "0")}.nfo`
+  );
+
+  if (!metadata.tmdb) {
+    console.warn(
+      "⚠️ No TMDB metadata available. Skipping season NFO generation."
+    );
+    return;
+  }
+
+  const xml = buildXml("season", {
+    seasonnumber: seasonNumber.toString(),
+    title: metadata.tmdb.season_data?.name || `Season ${seasonNumber}`,
+    plot: metadata.tmdb.season_data?.overview,
+    year: metadata.tmdb.season_data?.air_date?.split("-")[0],
+  });
+
+  await saveNfoFile(nfoPath, xml);
+}
+
+/**
+ * Save XML content to a file with error handling.
+ */
+async function saveNfoFile(
+  filePath: string,
+  xmlContent: string
+): Promise<void> {
   try {
-    if (!metadata.tmdb) {
-      console.warn("⚠️ No TMDB metadata available. Skipping .nfo generation.");
-      return;
-    }
-
-    const xml = isEnrichedMovieMetadata(metadata)
-      ? buildXml("movie", {
-          title: metadata.tmdb.title,
-          originaltitle: metadata.tmdb.original_title,
-          plot: metadata.tmdb.overview,
-          year: metadata.tmdb.release_date?.split("-")[0],
-          id: metadata.tmdb.id.toString(),
-          language: metadata.tmdb.original_language,
-          genres: metadata.tmdb.genres,
-          runtime: metadata.tmdb.runtime?.toString(),
-          thumb: options.includeThumb ? metadata.tmdb.poster_path : undefined,
-          director: findDirector(metadata.tmdb.crew),
-          credits: findWriter(metadata.tmdb.crew),
-          actors: options.includeCast ? metadata.tmdb.cast : undefined,
-        })
-      : isEnrichedSeriesMetadata(metadata)
-      ? buildXml("episodedetails", {
-          title: metadata.tmdb.episode_data?.name || metadata.tmdb.name,
-          showtitle: metadata.tmdb.name,
-          plot: metadata.tmdb.episode_data?.overview || metadata.tmdb.overview,
-          season:
-            metadata.tmdb.episode_data?.season_number?.toString() ||
-            metadata.season?.toString(),
-          episode:
-            metadata.tmdb.episode_data?.episode_number?.toString() ||
-            metadata.episode?.toString(),
-          aired:
-            metadata.tmdb.episode_data?.air_date ||
-            metadata.tmdb.first_air_date,
-          runtime: metadata.tmdb.episode_data?.runtime?.toString(),
-          id: metadata.tmdb.id.toString(),
-          language: metadata.tmdb.original_language,
-          genres: metadata.tmdb.genres,
-          thumb: options.includeThumb
-            ? metadata.tmdb.episode_data?.still_path
-            : undefined,
-          director: findDirector(metadata.tmdb.episode_data?.crew),
-          credits: findWriter(metadata.tmdb.episode_data?.crew),
-          actors: options.includeCast
-            ? metadata.tmdb.episode_data?.guest_stars
-            : undefined,
-        })
-      : null;
-
-    if (!xml) {
-      console.warn(
-        "⚠️ Metadata type not recognized. Skipping .nfo generation."
-      );
-      return;
-    }
-
-    await fs.writeFile(nfoPath, xml, "utf-8");
-    console.log(`📄 NFO file generated: ${nfoPath}`);
+    await fs.writeFile(filePath, xmlContent, "utf-8");
+    console.log(`📄 NFO file generated: ${filePath}`);
   } catch (err) {
-    console.error("❌ Failed to write .nfo file:", err);
+    console.error(`❌ Failed to write NFO file at ${filePath}:`, err);
   }
 }
 
@@ -107,7 +166,9 @@ function buildXml(
         return value
           .map(
             (actor) =>
-              `  <actor>\n    <name>${escapeXml(actor.name)}</name>\n    <role>${escapeXml(
+              `  <actor>\n    <name>${escapeXml(
+                actor.name
+              )}</name>\n    <role>${escapeXml(
                 actor.character || ""
               )}</role>\n  </actor>`
           )
