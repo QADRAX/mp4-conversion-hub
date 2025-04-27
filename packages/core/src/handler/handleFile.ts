@@ -165,10 +165,9 @@ export async function handleFile(
       errorMessage,
       outputSizeMb,
       inputSizeMb,
-      metadata,
     };
 
     await historyStorage.append(historyEntry);
-    await sendWebhook(historyEntry, config.webhookUrl);
+    await sendWebhook({ ...historyEntry, metadata }, config.webhookUrl);
   }
 }

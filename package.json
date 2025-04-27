@@ -1,6 +1,6 @@
 {
   "name": "mp4-conversion-hub",
-  "version": "1.4.1",
+  "version": "1.4.3",
   "description": "Docker based MP4 Converter app for CasaOS",
   "main": "index.js",
   "scripts": {

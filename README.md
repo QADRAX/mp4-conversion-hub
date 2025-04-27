@@ -37,11 +37,12 @@ On a home server setup (e.g., CasaOS, Portainer, or manual Docker Compose), it's
 # Example folder structure after processing:
 📂 input        # Shared with SFTP and MP4 Hub (input files go here)
 📂 output       # Shared with Jellyfin and MP4 Hub
+    📄 history.json
     📂 movies
     └── 📂 Gladiator (2000)
-        📄 Gladiator (2000).mp4
-        📄 Gladiator (2000).nfo
-        📄 Gladiator (2000)-poster.jpg
+        📄 Gladiator.2000.mp4
+        📄 Gladiator.2000.nfo
+        📄 Gladiator.2000-poster.jpg
     📂 series
     └── 📂 Breaking Bad
         📄 tvshow.nfo                     # Metadata for the entire series

@@ -1,5 +1,13 @@
 # Changelog
 
+## [v1.4.3] - 2025-04-27
+
+### 🔧 Improvements
+
+- 🛠️ **Perfomance issue**
+
+  Stop writting all metadata in history.json
+
 ## [v1.4.2] - 2025-04-27
 
 ### 🔧 Improvements

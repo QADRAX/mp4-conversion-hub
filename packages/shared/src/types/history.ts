@@ -11,5 +11,4 @@ export type HistoryEntry = {
   outputSizeMb?: number;
   status: ProcessStatus;
   errorMessage?: string;
-  metadata?: EnrichedVideoMetadata;
 };
