@@ -4,17 +4,17 @@
 
 ### 🔧 Improvements
 
-- 📂 **Unified output file names**
+- 📂 **Consistent and descriptive filenames for media content**
 
-  Media files are now renamed consistently using metadata information, generating cleaner and more organized filenames compatible with media servers like Jellyfin or Plex.
+  Output files are now renamed based on enriched metadata, including title, year, season and episode where applicable.
 
-- 📄 **More accurate metadata extraction**
+- 📄 **Automatic correction of encoding issues in metadata**
 
-  Metadata extraction now corrects common text encoding errors automatically (e.g., fixing strange characters like `Ã¡` to `á`), improving title and episode name recognition.
+  Metadata extraction now corrects common text encoding errors automatically (e.g., fixing strange characters like `Ã¡` to `á`).
 
-- 🛠️ **Improved NFO file generation with enriched metadata for series**
+- 🛠️ **Enhanced NFO file generation for TV series**
 
-  NFO files now include detailed episode metadata (title, plot, air date, runtime) when available, ensuring better integration with media centers like Jellyfin and Plex.
+  NFO files now include detailed and structured metadata for episodes (title, plot, air date, runtime), series, and seasons when available.
 
 ---
 
