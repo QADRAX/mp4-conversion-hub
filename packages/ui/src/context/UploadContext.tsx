@@ -4,7 +4,7 @@ import { useState } from "preact/hooks";
 export type UploadState = {
   uploading: boolean;
   status: string | null;
-  uploadFile: (file: File, targetPath: string) => Promise<void>;
+  uploadFile: (file: File) => Promise<void>;
 };
 
 export const UploadContext = createContext<UploadState>({
@@ -21,7 +21,7 @@ export function UploadProvider({
   const [uploading, setUploading] = useState(false);
   const [status, setStatus] = useState<string | null>(null);
 
-  const uploadFile = async (file: File, targetPath: string): Promise<void> => {
+  const uploadFile = async (file: File): Promise<void> => {
     if (uploading) {
       setStatus("⚠️ Please wait until the current upload finishes.");
       return;
@@ -35,7 +35,7 @@ export function UploadProvider({
 
     try {
       const res = await fetch(
-        `/api/upload?path=${encodeURIComponent(targetPath)}`,
+        `/api/upload`,
         {
           method: "POST",
           body: formData,

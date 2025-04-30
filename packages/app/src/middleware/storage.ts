@@ -3,19 +3,9 @@ import multer from "multer";
 import path from "path";
 import fs from "fs/promises";
 
-function sanitizeSubpath(subpath: string): string {
-  return subpath
-    .replace(/[^a-zA-Z0-9/_-]/g, "")
-    .replace(/^\//, "")
-    .replace(/\.\./g, "");
-}
-
 const storage = multer.diskStorage({
-  destination: async (req, _file, cb) => {
-    const raw = (req.query.path as string) ?? "";
-    const subpath = sanitizeSubpath(raw);
-    const dest = path.join(INPUT_DIR, subpath);
-
+  destination: async (_req, _file, cb) => {
+    const dest = path.join(INPUT_DIR);
     try {
       await fs.mkdir(dest, { recursive: true });
       cb(null, dest);
