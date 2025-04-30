@@ -1,5 +1,38 @@
 # Changelog
 
+## [v1.4.4] - 2025-04-30
+
+### 🔒 Security
+
+- 🛡️ **HTTP security headers added**
+
+  The backend now includes industry-standard HTTP headers to enhance security:
+  
+  - `Content-Security-Policy`
+  - `Strict-Transport-Security`
+  - `X-Frame-Options`
+  - `X-Content-Type-Options`
+  - `X-XSS-Protection`
+
+- 🔐 **Removed default Express fingerprint**
+
+  The `X-Powered-By` header has been removed.
+
+### 🧭 UI & UX Changes
+
+- 🗃️ **Simplified upload path behavior**
+
+  The folder navigation interface has been removed. The web UI now allows uploads **only to the root input directory**, and no longer supports browsing or creating subfolders.
+
+  - Previously, users could navigate and upload files into nested folders, which led to unwanted complexity.
+  - Now, the backend still watches subfolders for incoming files, but the UI won't expose or interact with them.
+
+- 👁️ **Version display in footer**
+
+  The app version is now shown in the footer of the web UI.
+
+---
+
 ## [v1.4.3] - 2025-04-27
 
 ### 🔧 Improvements
@@ -7,6 +40,8 @@
 - 🛠️ **Perfomance issue**
 
   Stop writting all metadata in history.json
+
+---
 
 ## [v1.4.2] - 2025-04-27
 

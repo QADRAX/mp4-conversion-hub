@@ -2,7 +2,7 @@ import { useState, useContext } from "preact/hooks";
 import "./UploadForm.css";
 import { UploadContext } from "../context/UploadContext";
 
-export function UploadForm({ targetPath }: { targetPath: string }) {
+export function UploadForm() {
   const { uploading, status, uploadFile } = useContext(UploadContext);
 
   const [dragActive, setDragActive] = useState(false);
@@ -13,7 +13,7 @@ export function UploadForm({ targetPath }: { targetPath: string }) {
     const formData = new FormData();
     formData.append("file", file);
 
-    await uploadFile(file, targetPath); // pasa el path aquí
+    await uploadFile(file); // pasa el path aquí
   };
 
   const handleFormSubmit = (e: Event) => {
@@ -51,7 +51,7 @@ export function UploadForm({ targetPath }: { targetPath: string }) {
         {status && <p>{status}</p>}
       </form>
       <p class="upload-hint">
-        Drag & drop a file here to: <code>/{targetPath || ""}</code>
+        Drag & drop a file here
       </p>
     </div>
   );
